@@ -24,8 +24,8 @@ struct lca {
 	lca(vector<vector<int>>& edges, int root) {
 
 		// set up the euler walk
-		walk_index = vector<int>(edges.size(), 0);
-		visited = vector<bool>(edges.size(), 0);
+		walk_index.assign(edges.size(), 0);
+		visited.assign(edges.size(), 0);
 		_label_walk(edges, root, 0);
 
 		// set up RMQ lookup table

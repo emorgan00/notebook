@@ -21,8 +21,8 @@ struct ktha {
 	ktha(vector<vector<int>>& adj, int root) {
 
 		int maxexp = floor(log2(adj.size()));
-		parent = vector<vector<int>>(maxexp, vector<int>(adj.size()));
-		visited = vector<bool>(adj.size(), 0);
+		parent.assign(maxexp, vector<int>(adj.size()));
+		visited.assign(adj.size(), 0);
 
 		_label_parent(root, adj);
 		for (int exp = 1; exp <= maxexp; exp++)

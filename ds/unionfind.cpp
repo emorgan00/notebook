@@ -9,9 +9,8 @@ struct unionfind {
 
 	unionfind(int s) {
 		length = s;
-		parent = vector<int>(s);
-		for (int i = 0; i < s; i++)
-			parent[i] = i;
+		parent.assign(s, 0);
+		std::iota(parent.begin(), parent.end(), 0);
 	}
 
 	int rep(int x) {

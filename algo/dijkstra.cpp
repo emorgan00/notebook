@@ -34,7 +34,7 @@ int dijkstra(vector<vector<int>> adj, int start, int end) {
 }
 
 // Accepts an adjacency list. Returns the minimum cost from start to end.
-// Pairs should be in the form {weight, destination}. Runs in O(E+VlogV).
+// Pairs should be in the form {weight, destination}. Runs in O(ElogV).
 int dijkstra(vector<vector<pair<int, int>>> adj, int start, int end) {
 
 	int size = adj.size();
@@ -90,7 +90,7 @@ vector<int> dijkstra(vector<vector<int>> adj, int start) {
 
 // Accepts an adjacency list. Returns the minimum cost from start to all endpoints.
 // Pairs should be in the form {weight, destination}.
-// Runs in O(E+VlogV)
+// Runs in O(ElogV)
 vector<int> dijkstra(vector<vector<pair<int, int>>> adj, int start) {
 
 	int size = adj.size();

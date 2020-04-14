@@ -9,14 +9,14 @@ struct fenwick {
 	int length;
 	vector<T> tree;
 
-	fenwick(int s) {
-		length = s+1;
-		tree = vector<T>(length+1);
+	fenwick(int size) {
+		length = size+1;
+		tree.assign(length+1, 0);
 	}
 
 	fenwick(vector<T>& v) {
 		length = v.size()+1;
-		tree = vector<T>(length+1);
+		tree.assign(length+1, 0);
 		for (int i = 0; i < v.size(); i++)
 			update(i, v[i]);
 	}

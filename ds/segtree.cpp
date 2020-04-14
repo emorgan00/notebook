@@ -14,9 +14,9 @@ struct segtree {
 
 	segtree(int s) {
 		length = pow(2, ceil(log2(s)));
-		tree = vector<T>(2*length, identity);
-		updates = vector<T>(2*length, identity);
-		insertflag = vector<bool>(2*length, 0);
+		tree.assign(2*length, identity);
+		updates.assign(2*length, identity);
+		insertflag.assign(2*length, 0);
 	}
 
 	segtree(vector<T>& v) : segtree(v.size()) {
