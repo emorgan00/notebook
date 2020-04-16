@@ -35,14 +35,12 @@ int mst(vector<vector<int>>& adj) {
 struct unionfind {
 
 	int length;
-	vector<int> parent, rank;
+	vector<int> parent;
 
 	unionfind(int s) {
 		length = s;
-		rank = vector<int>(s, 0);
-		parent = vector<int>(s);
-		for (int i = 0; i < s; i++)
-			parent[i] = i;
+		parent.assign(s, 0);
+		std::iota(parent.begin(), parent.end(), 0);
 	}
 
 	int rep(int x) {
@@ -58,14 +56,11 @@ struct unionfind {
 		b = rep(b);
 		if (a == b)
 			return;
-		if (rank[a] < rank[b])
-			swap(a, b);
 		parent[b] = a;
-		if (rank[a] == rank[b])
-			rank[a]++;
 	}
 
-	bool query(int a, int b) {
+	// returns true if a and b are in the same set.
+	inline bool query(int a, int b) {
 		return rep(a) == rep(b);
 	}
 };

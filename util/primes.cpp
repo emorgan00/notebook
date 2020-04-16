@@ -8,12 +8,12 @@ using namespace std;
 // runs in O(nlogn) time.
 template<typename T>
 vector<bool> primesieve(T n) {
-	vector<bool> sieve(n, 1);
-	for (T i = 2; i < n; i++)
-		if (sieve[i])
-			for (T j = 2*i; j < n; j += i)
-				sieve[j] = 0;
-	return sieve;
+    vector<bool> sieve(n, 1);
+    for (T i = 2; i < n; i++)
+        if (sieve[i])
+            for (T j = 2*i; j < n; j += i)
+                sieve[j] = 0;
+    return sieve;
 }
 
 
@@ -81,8 +81,8 @@ vector<T> divisors(T n) {
 // checks if a number is prime in O(sqrt(n)) time.
 template<typename T>
 bool isprime(T n) {
-	for (T i = 2; i <= (T)(sqrt(n)); i++)
-		if (n%i == 0)
-			return false;
-	return true;
+    for (T i = 2; i <= (T)(sqrt(n)); i++)
+        if (n%i == 0)
+            return false;
+    return true;
 }

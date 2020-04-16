@@ -1,9 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define gcd __gcd
-#define lcm(a, b) a*b/__gcd(a, b)
-
 // returns (b^r)%m, runs in O(logr) time.
 template<typename T>
 T powmod(T b, T r, T m) {
@@ -15,6 +12,13 @@ T powmod(T b, T r, T m) {
     return out;
 }
 
+// returns a unique number b s.t. ab = 1 mod m
 T modinv(T a, T m) {
-    
+    T r = 1, k = m-2;
+    while (k) {
+        if (k&1) r = (r*a)%m;
+        t = (a*a)%m;
+        k >>= 1;
+    }
+    return r%m;
 }
