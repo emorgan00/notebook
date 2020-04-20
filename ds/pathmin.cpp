@@ -9,6 +9,8 @@ struct unionfind {
     int length;
     vector<int> parent;
 
+    unionfind() {}
+
     unionfind(int s) {
         length = s;
         parent.assign(s, 0);
@@ -42,6 +44,8 @@ struct rmq {
 
     vector<vector<T>> tree;
 
+    rmq() {}
+
     rmq(vector<T>& data) {
 
         int n = data.size();
@@ -60,34 +64,37 @@ struct rmq {
     }
 };
 
+template<typename T>
 struct pathmin {
 
     int length;
     unionfind UF;
-    rmq RMQ;
+    rmq<T> RMQ;
     vector<int> index;
 
     // Accepts an adjacency list with pairs in the form {weight, destination}.
     // Must be a tree. There can only be one edge between two vertices.
     // O(VlogV) to set up, O(1) to query.
-    pathmin(vector<vector<pair<int, int>>>& adj) {
+    pathmin(vector<vector<pair<T, int>>>& adj) {
 
         length = adj.size();
         UF = unionfind(length);
-        vector<int> pre(length), post(length), succ(length, -1), weight(length);
+        vector<int> pre(length), post(length), succ(length, -1);
+        vector<T> weight(length);
 
         for (int i = 0; i < length; i++)
             pre[i] = post[i] = i;
 
-        vector<tuple<int, int, int>> edges;
+        vector<tuple<T, int, int>> edges;
         edges.reserve(length-1);
         for (int i = 0; i < length; i++)
             for (auto p : adj[i])
                 edges.push_back({p.first, i, p.second});
 
-        sort(edges.begin(), edges.end(), greater<tuple<int, int, int>>());
+        sort(edges.begin(), edges.end(), greater<tuple<T, int, int>>());
         for (auto edge : edges) {
-            int w, a, b;
+            T w;
+            int a, b;
             tie(w, a, b) = edge;
             if (UF.query(a, b))
                 continue;
@@ -104,7 +111,7 @@ struct pathmin {
         }
 
         index = vector<int>(length);
-        vector<int> values = vector<int>(length);
+        vector<T> values(length);
         int cur = pre[UF.rep(0)], i = 0;
         while (cur != -1) {
             index[cur] = i;
