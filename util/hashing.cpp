@@ -1,17 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// copy this to allow pairs to be used with unordered_set
-// note, this hash is weak but works fine for random inputs
+// call randint() for a random integer, good for hashing
+mt19937 randint(chrono::steady_clock::now().time_since_epoch().count());
 
-template<typename T1, typename T2>
-struct std::hash<pair<T1, T2>> {
-    size_t operator()(const pair<T1, T2>& p) const {
-        size_t h1 = std::hash<T1>()(p.first);
-        size_t h2 = std::hash<T2>()(p.second);
-        return (h1 << 1) ^ h2;
-    }
-};
+// returns a random integer over [a, b] inclusive
+inline int uniform_randint(const int a, const int b) {
+    return uniform_int_distribution<int>(a, b)(randint);
+}
 
 // hack-resistant hashmaps
 

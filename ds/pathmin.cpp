@@ -67,8 +67,6 @@ struct rmq {
 template<typename T>
 struct pathmin {
 
-    int length;
-    unionfind UF;
     rmq<T> RMQ;
     vector<int> index;
 
@@ -77,8 +75,8 @@ struct pathmin {
     // O(VlogV) to set up, O(1) to query.
     pathmin(vector<vector<pair<T, int>>>& adj) {
 
-        length = adj.size();
-        UF = unionfind(length);
+        int length = adj.size();
+        unionfind UF(length);
         vector<int> pre(length), post(length), succ(length, -1);
         vector<T> weight(length);
 
@@ -92,7 +90,7 @@ struct pathmin {
                 edges.push_back({p.first, i, p.second});
 
         sort(edges.begin(), edges.end(), greater<tuple<T, int, int>>());
-        for (auto edge : edges) {
+        for (auto& edge : edges) {
             T w;
             int a, b;
             tie(w, a, b) = edge;
@@ -110,7 +108,7 @@ struct pathmin {
             post[rep] = post[Brep];
         }
 
-        index = vector<int>(length);
+        index.assign(length, 0);
         vector<T> values(length);
         int cur = pre[UF.rep(0)], i = 0;
         while (cur != -1) {

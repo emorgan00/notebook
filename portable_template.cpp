@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// debug code stolen from tourist
+
 template <typename A, typename B>
 string to_string(pair<A, B> p);
  

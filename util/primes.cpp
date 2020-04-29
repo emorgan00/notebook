@@ -86,3 +86,8 @@ bool isprime(T n) {
             return false;
     return true;
 }
+
+int main() {
+    int n = 4;
+    vector<int> a(n); for (auto& x : a) fin >> x;
+}
