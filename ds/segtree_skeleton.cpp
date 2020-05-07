@@ -37,7 +37,7 @@ struct segtree {
         /* clear update at tree[i] */
     }
 
-    void update(int i, int l, int r, /* update type */ x) {
+    void update(int l, int r, /* update type */ x, int i = 1) {
         push(i);
         if (l > tree[i].b || r < tree[i].a)
             return;
@@ -45,18 +45,18 @@ struct segtree {
             /* add an update at tree[i] */
             push(i);
         } else {
-            update(2*i, l, r, /* new update value */);
-            update(2*i+1, l, r, /* new update value */);
+            update(l, r, /* new update value */, 2*i);
+            update(l, r, /* new update value */, 2*i+1);
             /* recalculate value at tree[i] */
         }
     }
 
-    /* query type */ query(int i, int l, int r) {
+    /* query type */ query(int l, int r, int i = 1) {
         push(i);
         if (l <= tree[i].a && r >= tree[i].b)
             return /* value at tree[i] */;
         if (l > tree[i].b || r < tree[i].a)
             return /* identity */;
-        return query(2*i, l, r) /* combined with */ query(2*i+1, l, r);
+        return query(l, r, 2*i) /* combined with */ query(l, r, 2*i+1);
     }
 };

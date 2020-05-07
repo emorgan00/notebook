@@ -22,7 +22,6 @@ struct fenwick {
 	}
 
 	// insert val at index i
-	// to remove, just insert with negative val
 	void update(int i, T val) {
 		i++;
 		while (i < length) {
