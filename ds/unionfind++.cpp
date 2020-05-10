@@ -10,7 +10,7 @@ struct unionfind {
 
     unionfind(int s) {
         length = s;
-        parent.assign(s, 0);
+        parent.resize(s);
         sz.assign(s, 1);
         std::iota(parent.begin(), parent.end(), 0);
     }

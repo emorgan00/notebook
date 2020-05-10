@@ -23,3 +23,14 @@ T modinv(T a, T m) {
     }
     return r%m;
 }
+
+// based on something from KACTL, requires 64bit C++
+struct fastmod {
+    __int128_t b, m;
+    fastmod(int64_t x) : b(x), m(((__int128_t)1<<64) / x) {}
+    int64_t reduce(int64_t x) {
+        __int128_t q = (m*x)>>64;
+        __int128_t r = x - q*b;
+        return r >= b ? r - b : r;
+    }
+};

@@ -122,7 +122,7 @@ struct pathmin {
     }
 
     // minimum edge along the path from a to b.
-    int query(int a, int b) {
+    T query(int a, int b) {
         a = index[a]; b = index[b];
         if (a > b) swap(a, b);
         return RMQ.query(a, b-1);
