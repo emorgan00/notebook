@@ -10,11 +10,7 @@ struct twosat {
     vector<int> low, depth, stack, comp;
     int index, cur;
 
-    twosat(int s) {
-        size = s;
-        adj.assign(2*size, {});
-        out.assign(size, 0);
-    }
+    twosat(int s) : size(s), adj(2*s), out(s, 0) {}
 
     bool connect(int i) {
 

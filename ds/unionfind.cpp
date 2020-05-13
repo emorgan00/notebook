@@ -7,9 +7,7 @@ struct unionfind {
 	int length;
 	vector<int> parent;
 
-	unionfind(int s) {
-		length = s;
-		parent.resize(s);
+	unionfind(int s) : length(s), parent(s) {
 		std::iota(parent.begin(), parent.end(), 0);
 	}
 
