@@ -4,6 +4,15 @@ using namespace std;
 #define gcd __gcd
 #define lcm(a, b) a*b/__gcd(a, b)
 
+// checks if a number is prime in O(sqrt(n)) time.
+template<typename T>
+bool isprime(T n) {
+    for (T i = 2; i <= (T)(sqrt(n)); i++)
+        if (n%i == 0)
+            return false;
+    return true;
+}
+
 // returns a vector of length n, containing 1 if a number is prime, else 0.
 // runs in O(nlogn) time.
 template<typename T>
@@ -42,8 +51,7 @@ vector<T> primefactors(T n) {
             i = n;
         if (n%i == 0) {
             out.push_back(i);
-            n /= i;
-            i--;
+            n /= i; i--;
         }
     }
     return out;
@@ -78,11 +86,19 @@ vector<T> divisors(T n) {
     return s;
 }
 
-// checks if a number is prime in O(sqrt(n)) time.
+// computes Euler's totient function of n in O(sqrt(n)) time.
 template<typename T>
-bool isprime(T n) {
-    for (T i = 2; i <= (T)(sqrt(n)); i++)
-        if (n%i == 0)
-            return false;
-    return true;
+T totient(T n) {
+    T out = 1;
+    for (T i = 2; i <= n; i++) {
+        if (i >= (T)(sqrt(n))+1)
+            i = n;
+        if (n%i == 0) {
+            n /= i; out *= i-1;
+            while (n%i == 0) {
+                n /= i; out *= i;
+            }
+        }
+    }
+    return out;
 }

@@ -11,15 +11,17 @@ struct fenwick_multiset {
     int s = 0, tree[N+1] = {};
     int size() { return s; }
 
-    void insert(int x) {
+    // insert x into the set with multiplicity k
+    void insert(int x, int k = 1) {
         for (x++; x <= N; x += x & -x)
-            tree[x]++;
+            tree[x] += k;
         s++;
     }
 
-    void remove(int x) {
+    // remove x from the set with multiplicity k
+    void remove(int x, int k = 1) {
         for (x++; x <= N; x += x & -x)
-            tree[x]--;
+            tree[x] -= k;
         s--;
     }
 
