@@ -1,30 +1,34 @@
 struct segtree {
 
     struct node {
-        int a, b;
-        /* value and update */
+
     };
 
+    vector<int> a, b;
     vector<node> tree;
+    vector</* update type */> u;
     int n;
 
-    segtree(vector</* value type */>& a) {
-        n = 1<<int(ceil(log2(a.size())));
+    segtree(vector</* value type */>& v) {
+
+        n = 1<<int(ceil(log2(v.size())));
         tree.resize(2*n);
+        a.resize(2*n); b.resize(2*n);
+        u.assign(2*n, /* value corresponding to no update */);
+
         for (int i = 2*n-1; i > 0; i--) {
             if (i >= n) {
-                tree[i].a = tree[i].b = i-n;
-                if (i-n < a.size()) {
-                    /* set value at tree[i] to a[i-n] */
+                a[i] = b[i] = i-n;
+                if (i-n < v.size()) {
+                    tree[i] = /* v[i-n] */
                 } else {
-                    /* set value at tree[i] to identity */
+                    tree[i] = /* identity */
                 }
             } else {
-                tree[i].a = tree[2*i].a;
-                tree[i].b = tree[2*i+1].b;
-                /* recalculate value at tree[i] */
+                a[i] = a[2*i];
+                b[i] = b[2*i+1];
+                /* compute node at tree[i] */
             }
-            /* clear update at tree[i] */
         }
     }
 
@@ -38,25 +42,23 @@ struct segtree {
     }
 
     void update(int l, int r, /* update type */ x, int i = 1) {
-        push(i);
-        if (l > tree[i].b || r < tree[i].a)
-            return;
-        if (l <= tree[i].a && r >= tree[i].b) {
-            /* add an update at tree[i] */
-            push(i);
-        } else {
-            update(l, r, /* new update value */, 2*i);
-            update(l, r, /* new update value */, 2*i+1);
-            /* recalculate value at tree[i] */
+        if (l <= a[i] && r >= b[i]) {
+            /* add an update at tree[i] (may already have update) */
         }
+        push(i);
+        if (l > b[i] || r < a[i] || l <= a[i] && r >= b[i])
+            return;
+        update(l, r, /* new update value */, 2*i);
+        update(l, r, /* new update value */, 2*i+1);
+        /* recompute node at tree[i] */
     }
 
-    /* query type */ query(int l, int r, int i = 1) {
+    /* query return type */ query(int l, int r, int i = 1) {
         push(i);
-        if (l <= tree[i].a && r >= tree[i].b)
-            return /* value at tree[i] */;
-        if (l > tree[i].b || r < tree[i].a)
-            return /* identity */;
+        if (l <= a[i] && r >= b[i])
+            return /* tree[i] */
+        if (l > b[i] || r < a[i])
+            return /* identity */
         return query(l, r, 2*i) /* combined with */ query(l, r, 2*i+1);
     }
 };
