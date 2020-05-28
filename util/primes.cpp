@@ -72,11 +72,11 @@ vector<T> uniqueprimefactors(T n) {
     return out;
 }
 
-// returns a sorted list of all divisors (>1) of n in O(sqrt(n)) time.
+// returns a sorted list of all divisors of n in O(sqrt(n)) time.
 template<typename T>
 vector<T> divisors(T n) {
     vector<T> s, e;
-    for (T i = 2; i <= (T)(sqrt(n)); i++)
+    for (T i = 1; i <= (T)(sqrt(n)); i++)
         if (n%i == 0) {
             s.push_back(i);
             if (i*i != n) e.push_back(n/i);

@@ -10,19 +10,19 @@ struct fenwick_multiset {
 
     int s = 0, tree[N+1] = {};
     int size() const { return s; }
-
+    
     // insert x into the set with multiplicity k
     void insert(int x, const int k = 1) {
         for (x++; x <= N; x += x & -x)
             tree[x] += k;
-        s++;
+        s += k;
     }
 
     // remove x from the set with multiplicity k
     void remove(int x, const int k = 1) {
         for (x++; x <= N; x += x & -x)
             tree[x] -= k;
-        s--;
+        s -= k;
     }
 
     // returns the number of elements in
