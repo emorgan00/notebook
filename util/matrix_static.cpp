@@ -133,7 +133,7 @@ inline void operator+=(matrix<T, ah, aw>& A, const matrix<T, bh, bw>& B) {
     A.add(B);
 }
 
-// zero matrix (example use: auto M = zero<5, 5>();)
+// zero matrix (example use: auto M = zero<int, 5, 5>();)
 
 template<typename T, int h, int w>
 inline constexpr matrix<T, h, w> zero() {
@@ -142,7 +142,7 @@ inline constexpr matrix<T, h, w> zero() {
     return M;
 }
 
-// identity matrix (example use: auto M = identity<5, 5>();)
+// identity matrix (example use: auto M = identity<int, 5, 5>();)
 
 template<typename T, int h, int w>
 inline constexpr matrix<T, h, w> identity() {

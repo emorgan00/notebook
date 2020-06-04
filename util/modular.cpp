@@ -12,14 +12,13 @@ T powmod(T b, T r, T m) {
     return out;
 }
 
-// returns a unique number b s.t. ab = 1 mod m
+// returns a unique number b s.t. ab = 1 mod m in O(logm) time.
 template<typename T>
 T inv(T a, T m) {
-    T r = 1, k = m-2;
-    while (k) {
+    T r = 1;
+    for (T k = m-2; k; k >>= 1) {
         if (k&1) r = (r*a)%m;
         a = (a*a)%m;
-        k >>= 1;
     }
     return r%m;
 }
