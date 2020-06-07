@@ -52,7 +52,7 @@ vector<int> kosaraju(vector<vector<int>>& adj) {
 vector<vector<int>> kosaraju_dag(vector<vector<int>>& adj, vector<int>& components) {
 
     int count = 0;
-    for (auto& x : components) count = max(count, x);
+    for (auto& x : components) count = max(count, x+1);
 
 	vector<unordered_set<int>> dag(count);
 	for (int i = 0; i < adj.size(); i++)
@@ -61,7 +61,7 @@ vector<vector<int>> kosaraju_dag(vector<vector<int>>& adj, vector<int>& componen
 				dag[components[i]].insert(components[j]);
 
 	vector<vector<int>> out(count);
-	for (int i = 0; i < adj.size(); i++)
+	for (int i = 0; i < count; i++)
 		for (int j : dag[i])
 			out[i].push_back(j);
 	return out;
