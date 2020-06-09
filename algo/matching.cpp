@@ -2,17 +2,13 @@
 using namespace std;
 
 // computes maximum matching in a bipartite graph
+// N vertices on the left, and M vertices on the right
+template<int N, int M>
 struct matcher {
 
-    vector<vector<int>> adj;
-    vector<int> ord, L, R;
-    vector<bool> vis;
-
-    // n edges on the left, and m edges on the right
-    matcher(int n, int m) : adj(n), ord(n), vis(n), L(n, -1), R(m, -1) {
-        std::iota(ord.begin(), ord.end(), 0);
-        std::random_shuffle(ord.begin(), ord.end());
-    }
+    vector<int> adj[N];
+    int ord[N], L[N], R[M];
+    bool vis[N];
 
     // add an edge between i on the left, and j on the right
     void edge(int i, int j) {
@@ -37,18 +33,22 @@ struct matcher {
         return 0;
     }
 
-    // returns a list of edges {left, right}. runs in O(E \sqrt V).
+    // returns a list of edges {left, right}. runs in O(E \sqrt V) time.
     vector<pair<int, int>> solve() {
+        iota(ord, ord+N, 0);
+        random_shuffle(ord, ord+N);
+        fill(L, L+N, -1);
+        fill(R, R+M, -1);
         bool v = 1;
         while (v) {
             v = 0;
-            fill(vis.begin(), vis.end(), 0);
+            fill(vis, vis+N, 0);
             for (int i : ord)
                 if (!vis[i] && L[i] == -1)
                     v |= dfs(i);
         }
         vector<pair<int, int>> out;
-        for (int i = 0; i < adj.size(); i++)
+        for (int i = 0; i < N; i++)
             if (L[i] != -1)
                 out.emplace_back(i, L[i]);
         return out;
