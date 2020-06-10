@@ -26,7 +26,7 @@ struct centroid {
     }
 
     void dfs2(int i, int p) {
-        bool v = s-sz[i] <= s;
+        bool v = sz[i] >= s;
         for (int j : adj[i])
             if (j != p && !vis[j]) {
                 dfs2(j, i);
