@@ -14,7 +14,7 @@ bool isprime(T n) {
 }
 
 // returns a vector of length n, containing 1 if a number is prime, else 0.
-// runs in O(nlogn) time.
+// runs in O(nloglogn) time.
 template<typename T>
 vector<bool> primesieve(T n) {
     vector<bool> sieve(n, 1);
@@ -27,7 +27,7 @@ vector<bool> primesieve(T n) {
 
 
 // returns a sorted list of all primes less than or equal to n.
-// runs in O(nlogn) time.
+// runs in O(nloglogn) time.
 template<typename T>
 vector<T> primesupto(T n) {
     vector<bool> sieve(n+1, 1);
