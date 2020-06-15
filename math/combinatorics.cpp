@@ -23,14 +23,24 @@ T inv(T a, T m) {
     return r%m;
 }
 
-// returns (n choose k) mod m in O(klogm) time.
+// returns (n choose k) mod m in O(k+logm) time.
 template<typename T>
 T choose(T n, T k, T m) {
-    T out = 1, r = n, d = 1;
-    for (int i = 0; i < k; i++) {
-        out = (out*r)%m;
-        out = (out*inv(d, m))%m;
-        r--; d++;
+    T a = 1, b = 1, r = n;
+    k = min(k, n-k);
+    for (T d = 1; d <= k; d++, r--) {
+        a = (a*r)%m;
+        b = (b*d)%m;
     }
-    return out;
+    return (a*inv(b, m))%m;
+}
+
+// returns S(n, k) mod m (stirling number of the second kind) in O(klogn) time.
+template<typename T>
+T stirling2(T n, T k, T m) {
+    T a = 1, b = 1;
+    for (int i = 0; i < k; i++) {
+        // ill finish it later
+    }
+    return (a*inv(b, m))%m;
 }

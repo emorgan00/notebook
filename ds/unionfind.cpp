@@ -1,13 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// both unite and query take effectively constant time
 struct unionfind {
 
     int length;
-    vector<int> parent;
+    vector<int> parent, sz;
 
-    unionfind(int s) : length(s), parent(s) {
+    unionfind(int s) : length(s), parent(s), sz(s, 1) {
         std::iota(parent.begin(), parent.end(), 0);
     }
 
@@ -22,12 +21,19 @@ struct unionfind {
     void unite(int a, int b) {
         a = rep(a);
         b = rep(b);
-        if (a != b)
-            parent[b] = a;
+        if (a == b)
+            return;
+        parent[b] = a;
+        sz[a] += sz[b];
     }
 
     // returns true if a and b are in the same set.
-    bool query(int a, int b) {
+    inline bool query(int a, int b) {
         return rep(a) == rep(b);
+    }
+
+    // returns the size of the set containing x
+    inline int size(int x) {
+        return sz[rep(x)];
     }
 };
