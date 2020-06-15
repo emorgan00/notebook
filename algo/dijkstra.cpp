@@ -1,115 +1,49 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define inf 1000000000
 
+// Accepts an adjacency list. Returns the minimum cost from s to e.
+// Pairs should be in the form {weight, destination}, runs in O(ElogV).
+template<typename T>
+T dijkstra(vector<vector<pair<T, int>>> adj, int s, int e) {
 
-// SINGLE END POINT (multiple end point algorithms further below)
+    const static T inf_T = numeric_limits<T>::max();
+    int n = adj.size();
+    vector<bool> vis(n, 0);
+    priority_queue<pair<T, int>, vector<pair<T, int>>, greater<pair<T, int>>> heap;
+    heap.push({0, s});
 
-
-// Accepts an adjacency matrix. Returns the minimum cost from start to end.
-// Use inf to indicate no edge. Runs in O(V^2).
-int dijkstra(vector<vector<int>> adj, int start, int end) {
-
-	int size = adj.size();
-	vector<int> cost(size, inf);
-	vector<bool> visited(size, 0);
-	cost[start] = 0;
-
-	while (1) {
-		int mincost = 0, n = -1;
-		for (int i = 0; i < size; i++)
-			if (!visited[i] && cost[i] <= mincost) {
-				n = i;
-				mincost = cost[i];
-			}
-		visited[n] = 1;
-		if (n == end)
-			return mincost;
-		if (n == -1)
-			break;
-		for (int i = 0; i < size; i++)
-			cost[i] = min(cost[i], mincost+adj[n][i]);
-	}
-	return inf;
+    while (!heap.empty()) {
+        auto [c, i] = heap.top(); heap.pop();
+        if (vis[i]) continue;
+        vis[i] = 1;
+        if (i == e) return c;
+        for (auto& [w, j] : adj[i])
+            if (!vis[j])
+                heap.push({c+w, j});
+    }
+    return inf_T;
 }
 
-// Accepts an adjacency list. Returns the minimum cost from start to end.
-// Pairs should be in the form {weight, destination}. Runs in O(ElogV).
-int dijkstra(vector<vector<pair<int, int>>> adj, int start, int end) {
+// Accepts an adjacency list. Returns the minimum cost from s to all vertices.
+// Pairs should be in the form {weight, destination}, runs in O(ElogV).
+template<typename T>
+vector<T> dijkstra(vector<vector<pair<T, int>>> adj, int s) {
 
-	int size = adj.size();
-	vector<bool> visited(size, 0);
-	priority_queue<pair<int, int>> heap;
-	heap.push({0, start});
+    const static T inf_T = numeric_limits<T>::max();
+    int n = adj.size();
+    vector<bool> vis(n, 0);
+    priority_queue<pair<T, int>, vector<pair<T, int>>, greater<pair<T, int>>> heap;
+    heap.push({0, s});
+    vector<T> out(n, inf_T);
 
-	while (!heap.empty()) {
-		int n = heap.top().second;
-		int mincost = -heap.top().first;
-		heap.pop();
-		if (visited[n])
-			continue;
-		visited[n] = 1;
-		if (n == end)
-			return mincost;
-		for (auto p : adj[n])
-			if (!visited[p.second])
-				heap.push({-(mincost+p.first), p.second});
-	}
-	return inf;
-}
-
-
-// ALL END POINTS
-
-
-// Accepts an adjacency matrix. Returns the minimum cost from start to all endpoints.
-// Use inf to indicate no edge.
-// Runs in O(V^2).
-vector<int> dijkstra(vector<vector<int>> adj, int start) {
-
-	int size = adj.size();
-	vector<int> cost(size, inf);
-	vector<bool> visited(size, 0);
-	cost[start] = 0;
-
-	while (1) {
-		int mincost = 0, n = -1;
-		for (int i = 0; i < size; i++)
-			if (!visited[i] && cost[i] <= mincost) {
-				n = i;
-				mincost = cost[i];
-			}
-		visited[n] = 1;
-		if (n == -1)
-			break;
-		for (int i = 0; i < size; i++)
-			cost[i] = min(cost[i], mincost+adj[n][i]);
-	}
-	return cost;
-}
-
-// Accepts an adjacency list. Returns the minimum cost from start to all endpoints.
-// Pairs should be in the form {weight, destination}.
-// Runs in O(ElogV)
-vector<int> dijkstra(vector<vector<pair<int, int>>> adj, int start) {
-
-	int size = adj.size();
-	vector<bool> visited(size, 0);
-	priority_queue<pair<int, int>> heap;
-	heap.push({0, start});
-	vector<int> out(size, inf);
-
-	while (!heap.empty()) {
-		int n = heap.top().second;
-		int mincost = -heap.top().first;
-		heap.pop();
-		if (visited[n])
-			continue;
-		visited[n] = 1;
-		out[n] = mincost;
-		for (auto p : adj[n])
-			if (!visited[p.second])
-				heap.push({-(mincost+p.first), p.second});
-	}
-	return out;
+    while (!heap.empty()) {
+        auto [c, i] = heap.top(); heap.pop();
+        if (vis[i]) continue;
+        vis[i] = 1;
+        out[i] = c;
+        for (auto& [w, j] : adj[i])
+            if (!vis[j])
+                heap.push({c+w, j});
+    }
+    return out;
 }

@@ -25,7 +25,6 @@ vector<bool> primesieve(T n) {
     return sieve;
 }
 
-
 // returns a sorted list of all primes less than or equal to n.
 // runs in O(nloglogn) time.
 template<typename T>
