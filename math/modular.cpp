@@ -33,7 +33,3 @@ struct fastmod {
         return r >= b ? r - b : r;
     }
 };
-
-int main() {
-    cout << inv(20, 998244353) << "\n";
-}
