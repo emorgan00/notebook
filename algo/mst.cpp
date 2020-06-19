@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define inf 1e9
 
 // Accepts an adjecency matrix. Returns the sum of the weights of the MST.
 // Use inf to show that two vertices are NOT connected. Runs in O(V^2).
 template<typename T>
 T mst(vector<vector<T>>& adj) {
 	
+	const static T inf_T = numeric_limits<T>::max();
 	vector<bool> visited(adj.size(), 0);
-	vector<T> cost(adj.size(), inf); // inf may need to be changed
+	vector<T> cost(adj.size(), inf_T);
 
 	cost[0] = 0;
 	T out = 0;
@@ -16,7 +16,7 @@ T mst(vector<vector<T>>& adj) {
 	// Prim's algorithm
 	for (int k = 0; k < adj.size(); k++) {
 
-		T leastcost = inf, next = -1; // inf may need to be changed
+		T leastcost = inf_T, next = -1;
 		for (int i = 0; i < adj.size(); i++)
 			if (!visited[i] && cost[i] < leastcost) {
 				leastcost = cost[i];
