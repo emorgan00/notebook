@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include "../../codeforces/debug.cpp"
 
 // combined data structure for various ancestor-related queries.
 
