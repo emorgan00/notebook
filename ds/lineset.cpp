@@ -18,8 +18,8 @@ struct lineset {
     const static T max_T = numeric_limits<T>::max();
     const static T min_T = numeric_limits<T>::min();
 
-    T div(T x, T y) {
-        return x/y - (is_integral<T>::value ? ((x ^ y) < 0 && x % y) : 0);
+    static T div(T x, T y) {
+        return x/y - (is_integral<T>::value ? ((x^y) < 0 && x%y) : 0);
     }
 
     bool isect(it x, it y) {

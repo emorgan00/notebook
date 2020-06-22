@@ -7,6 +7,7 @@ using namespace std;
 // checks if a number is prime in O(sqrt(n)) time.
 template<typename T>
 bool isprime(T n) {
+    if (n == 1) return false;
     for (T i = 2; i <= (T)(sqrt(n)); i++)
         if (n%i == 0)
             return false;
