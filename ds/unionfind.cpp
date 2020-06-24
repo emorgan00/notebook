@@ -3,37 +3,32 @@ using namespace std;
 
 struct unionfind {
 
-    int length;
-    vector<int> parent, sz;
+    vector<int> p, sz;
 
-    unionfind(int s) : length(s), parent(s), sz(s, 1) {
-        std::iota(parent.begin(), parent.end(), 0);
+    unionfind(int n) : p(n), sz(n, 1) {
+        iota(p.begin(), p.end(), 0);
     }
 
     int rep(int x) {
-        while (x != parent[x]) {
-            parent[x] = parent[parent[x]];
-            x = parent[x];
-        }
+        while (x != p[x])
+            x = p[x] = p[p[x]];
         return x;
     }
 
     void unite(int a, int b) {
-        a = rep(a);
-        b = rep(b);
-        if (a == b)
-            return;
-        parent[b] = a;
+        a = rep(a), b = rep(b);
+        if (a == b) return;
+        p[b] = a;
         sz[a] += sz[b];
     }
 
     // returns true if a and b are in the same set.
-    inline bool query(int a, int b) {
+    bool query(int a, int b) {
         return rep(a) == rep(b);
     }
 
     // returns the size of the set containing x
-    inline int size(int x) {
+    int size(int x) {
         return sz[rep(x)];
     }
 };

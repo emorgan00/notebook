@@ -4,29 +4,25 @@ using namespace std;
 // Returns the number of pairs (i, j) such that i < j and A[i] > A[j].
 // Runs in O(nlogn). Will not mutate the array.
 
-template<typename T>
-long long sub_inversions(vector<T>& A, vector<T>& store, int lower, int upper) {
+template<typename it>
+long long inversions(it first, it last) {
 
-    if (lower == upper) return 0;
-    int mid = (lower+upper)/2;
-    long long out = sub_inversions(store, A, lower, mid) + sub_inversions(store, A, mid+1, upper);
+    typedef typename remove_reference<decltype(*first)>::type T;
+    long long n = last-first, out = 0;
+    vector<T> A(first, last), B(n);
 
-    // merge sort
-    int j = mid+1, k = lower;
-    for (int i = lower; i <= mid; i++) {
-        while (j <= upper && A[j] < A[i])
-            store[k++] = A[j++];
-        store[k++] = A[i];
-        out += j-mid-1;
+    for (int w = 1; w < n; w <<= 1) {
+        for (int k = 0; k < n;) {
+            int s = k, j = k+w;
+            for (int i = k; i < s+w && i < n; i++) {
+                while (j < s+(w<<1) && j < n && A[j] < A[i])
+                    B[k++] = A[j++];
+                B[k++] = A[i], out += j-(s+w);
+            }
+            while (j < s+(w<<1) && j < n)
+                B[k++] = A[j++];
+        }
+        swap(A, B);
     }
-    while (j <= upper)
-        store[k++] = A[j++];
-
     return out;
-}
-
-template<typename T>
-long long inversions(vector<T>& A) {
-    vector<T> copy(A), store(A);
-    return sub_inversions(copy, store, 0, A.size()-1);
 }
