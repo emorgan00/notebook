@@ -61,9 +61,3 @@ struct suffixarray {
         return interval(str.begin(), str.end());
     }
 };
-
-int main() {
-    suffixarray a("banana");
-    for (int i = 0; i < 1000000; i++)
-        auto [l, r] = a.interval("na");
-}

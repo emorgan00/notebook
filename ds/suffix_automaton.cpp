@@ -3,74 +3,95 @@ using namespace std;
 
 // suffix automaton on a string of <= N characters
 
-template<int N>
 struct automaton {
 
+    struct node {
+        int p, len, clo; // clo indicates whether a state was created by cloning
+        map<int, int> adj; // transitions of form {char, destination}
+    };
+
     int n = 1, l = 0;
-    int p[2*N], len[2*N];
-    map<int, int> adj[2*N]; // transitions of form {char, destination}
-    bool clo[2*N]; // indicates whether a state was created by cloning
-    int sz[2*N]; // sz[i] = |endpos(i)|
+    vector<node> a;
 
-    automaton() { p[0] = -1, len[0] = 0; }
-
-    // returns the number of vertices in the automaton.
-    int size() const { return n; }
-
-    // append character c to the string,
+    // append character c to the automaton,
     // runs in O(log(min(n, K))) amortized, where K is the alphabet size.
     void append(int c) {
-        int r = n++, x = l, y, z;
-        len[r] = len[l]+1, clo[r] = 0, l = r;
-        for (; x != -1 && !adj[x].count(c); x = p[x])
-            adj[x][c] = r;
-        if (x == -1) p[r] = 0;
-        else if (len[y = adj[x][c]] == len[x]+1)
-            p[r] = y;
+        a.push_back({0, a[l].len+1, 0, {}});
+        int r = n++, x = l, y; l = r;
+        for (; x != -1 && !a[x].adj.count(c); x = a[x].p)
+            a[x].adj[c] = r;
+        if (x == -1) a[r].p = 0;
+        else if (a[y = a[x].adj[c]].len == a[x].len+1)
+            a[r].p = y;
         else {
-            len[z = n++] = len[x]+1, adj[z] = adj[y];
-            p[z] = p[y], p[r] = p[y] = z, clo[z] = 1;
-            for (; x != -1 && adj[x][c] == y; x = p[x])
-                adj[x][c] = z;
+            a.push_back({a[y].p, a[x].len+1, 1, a[y].adj});
+            a[r].p = a[y].p = n++;
+            for (; x != -1 && a[x].adj[c] == y; x = a[x].p)
+                a[x].adj[c] = n-1;
         }
+    }
+
+    automaton() { a.push_back({-1, 0, 0, {}}); }
+
+    template<typename it>
+    automaton(it first, it last) : automaton() {
+        for (it i = first; i != last; i++) append(*i);
+    }
+
+    automaton(string str) : automaton(str.begin(), str.end()) {}
+
+    // let x be the state corresponding to string s, then this returns
+    // the state corresponding to s + character c (possibly -1).
+    // runs in O(log(min(n, K))) time.
+    int push(int x, int c) {
+        if (a[x].adj.count(c)) return a[x].adj[c];
+        else return -1;
+    }
+
+    // let x > 0 be the state corresponding to string s with length len, then
+    // this returns the state corresponding to s with its first char removed.
+    // runs in O(1) time.
+    int pop(int x, int len) {
+        if (len == a[a[x].p].len+1) return a[x].p;
+        return x;
     }
 
     // returns the index of the state corresponding to the input,
     // or -1 if the input is not present as a substring.
     // runs in O(m), where m is the length of the input.
     template<typename it>
-    int get(it first, it last) const {
+    int find(it first, it last) {
         int x = 0;
-        for (it i = first; i != last; i++) {
-            if (adj[x].count(*i)) x = adj[x][*i];
-            else return -1;
-        }
+        for (it i = first; i != last; i++)
+            if((x = push(x, *i)) == -1) return -1;
         return x;
     }
 
-    int get(string str) const { return get(str.begin(), str.end()); }
+    int find(string str) { return find(str.begin(), str.end()); }
 
     // returns the indices of all states sorted by len, which is a
-    // topological sort of both the transition graph and the reversed link tree.
+    // topological ordering of both the transition graph and the reversed link tree.
     // runs in O(n).
     vector<int> order() const {
         vector<int> out;
         queue<int> q; q.push(0);
         while (!q.empty()) {
             int i = q.front(); q.pop(), out.push_back(i);
-            for (auto& [c, j] : adj[i])
-                if (len[j] == len[i]+1) q.push(j);
+            for (auto& [c, j] : a[i].adj)
+                if (a[j].len == a[i].len+1) q.push(j);
         }
         return out;
     }
 
-    // computes the sz array, runs in O(n).
+    vector<int> sz;
+
+    // computes the sz array, runs in O(n). sz[i] = |endpos(i)|.
     void refresh_sz() {
-        fill(sz, sz+n, 0);
+        sz.assign(n, 0);
         auto o = order();
         for (int i = n-1; i > 0; i--) {
-            if (!clo[o[i]]) sz[o[i]]++;
-            sz[p[o[i]]] += sz[o[i]];
+            if (!a[o[i]].clo) sz[o[i]]++;
+            sz[a[o[i]].p] += sz[o[i]];
         }
         sz[0] = 0;
     }
