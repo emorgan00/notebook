@@ -7,15 +7,15 @@ template<int N>
 struct automaton {
 
     int n = 1, l = 0;
-    int p[N], len[N];
-    map<int, int> adj[N]; // transitions of form {char, destination}
-    bool clo[N]; // indicates whether a state was created by cloning
-    int sz[N]; // sz[i] = |endpos(i)|
+    int p[2*N], len[2*N];
+    map<int, int> adj[2*N]; // transitions of form {char, destination}
+    bool clo[2*N]; // indicates whether a state was created by cloning
+    int sz[2*N]; // sz[i] = |endpos(i)|
 
     automaton() { p[0] = -1, len[0] = 0; }
 
     // returns the number of vertices in the automaton.
-    int size() { return n; }
+    int size() const { return n; }
 
     // append character c to the string,
     // runs in O(log(min(n, K))) amortized, where K is the alphabet size.
@@ -39,7 +39,7 @@ struct automaton {
     // or -1 if the input is not present as a substring.
     // runs in O(m), where m is the length of the input.
     template<typename it>
-    int get(it first, it last) {
+    int get(it first, it last) const {
         int x = 0;
         for (it i = first; i != last; i++) {
             if (adj[x].count(*i)) x = adj[x][*i];
@@ -48,10 +48,12 @@ struct automaton {
         return x;
     }
 
+    int get(string str) const { return get(str.begin(), str.end()); }
+
     // returns the indices of all states sorted by len, which is a
     // topological sort of both the transition graph and the reversed link tree.
     // runs in O(n).
-    vector<int> order() {
+    vector<int> order() const {
         vector<int> out;
         queue<int> q; q.push(0);
         while (!q.empty()) {
@@ -70,5 +72,6 @@ struct automaton {
             if (!clo[o[i]]) sz[o[i]]++;
             sz[p[o[i]]] += sz[o[i]];
         }
+        sz[0] = 0;
     }
 };
