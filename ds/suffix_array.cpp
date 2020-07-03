@@ -3,14 +3,20 @@ using namespace std;
 
 struct suffixarray {
 
-    vector<int> s, a;
+    // s = original string, a = suffix array
+    // r = inverse suffix array (i.e. a[r[i]] = i)
+    // lcp[i] = length of longest common prefix of a[i] and a[i+1]
+    vector<int> s, a, r, lcp;
 
-    // constructs a suffix array in O(nlogn) time, where K is the alphabet size.
+    // runs in O(nlogn) time.
     template<typename it>
-    suffixarray(it first, it last) : s(first, last), a(last-first+1) {
+    suffixarray(it first, it last) : s(first, last) {
+
+        // construct a, r
         int n = s.size()+1, c = 1, j = 1, b;
         map<int, vector<int>> grp;
-        vector<int> r(n), rc(n);
+        vector<int> rc(n);
+        r.resize(n); a.resize(n);
         for (int i = 0; i < n-1; i++)
             grp[s[i]].push_back(i);
         a[0] = n-1, r[n-1] = 0;
@@ -30,7 +36,17 @@ struct suffixarray {
                     rc[v[i]] = c, a[j++] = v[i];
                 } v.clear();
             } swap(r, rc);
-        } a.erase(a.begin());
+        }
+        a.erase(a.begin()), r.erase(r.end()-1);
+
+        // construct lcp
+        lcp.resize(--n-1), c = 0;
+        for (int i = 0; i < n; i++) {
+            if (--r[i] == 0) continue;
+            j = a[r[i]-1];
+            while (max(i, j)+c < n && s[i+c] == s[j+c]) c++;
+            lcp[r[i]-1] = c, c = max(0, c-1);
+        }
     }
 
     suffixarray(string str) : suffixarray(str.begin(), str.end()) {}

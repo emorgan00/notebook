@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// suffix automaton on a string of <= N characters
-
 struct automaton {
 
     struct node {
-        int p, len, clo; // clo indicates whether a state was created by cloning
+        int p, len;
+        bool clo; // indicates whether a state was created by cloning.
+        int fp; // stores the smallest element of endpos.
         map<int, int> adj; // transitions of form {char, destination}
     };
 
@@ -16,7 +16,7 @@ struct automaton {
     // append character c to the automaton,
     // runs in O(log(min(n, K))) amortized, where K is the alphabet size.
     void append(int c) {
-        a.push_back({0, a[l].len+1, 0, {}});
+        a.push_back({0, a[l].len+1, 0, a[l].len, {}});
         int r = n++, x = l, y; l = r;
         for (; x != -1 && !a[x].adj.count(c); x = a[x].p)
             a[x].adj[c] = r;
@@ -24,7 +24,7 @@ struct automaton {
         else if (a[y = a[x].adj[c]].len == a[x].len+1)
             a[r].p = y;
         else {
-            a.push_back({a[y].p, a[x].len+1, 1, a[y].adj});
+            a.push_back({a[y].p, a[x].len+1, 1, a[y].fp, a[y].adj});
             a[r].p = a[y].p = n++;
             for (; x != -1 && a[x].adj[c] == y; x = a[x].p)
                 a[x].adj[c] = n-1;
@@ -44,26 +44,24 @@ struct automaton {
     // the state corresponding to s + character c (possibly -1).
     // runs in O(log(min(n, K))) time.
     int push(int x, int c) {
-        if (a[x].adj.count(c)) return a[x].adj[c];
-        else return -1;
+        return x != -1 && a[x].adj.count(c) ? a[x].adj[c] : -1;
     }
 
     // let x > 0 be the state corresponding to string s with length len, then
     // this returns the state corresponding to s with its first char removed.
     // runs in O(1) time.
     int pop(int x, int len) {
-        if (len == a[a[x].p].len+1) return a[x].p;
-        return x;
+        return len == a[a[x].p].len+1 ? a[x].p : x;
     }
 
-    // returns the index of the state corresponding to the input,
+    // returns the state corresponding to the input,
     // or -1 if the input is not present as a substring.
     // runs in O(m), where m is the length of the input.
     template<typename it>
     int find(it first, it last) {
         int x = 0;
-        for (it i = first; i != last; i++)
-            if((x = push(x, *i)) == -1) return -1;
+        for (it i = first; i != last && x != -1; i++)
+            x = push(x, *i);
         return x;
     }
 
