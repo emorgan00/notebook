@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define inf 1e9
 
 
 // NEGATIVE WEIGHT CYCLE DETECTION (shortest paths further below)
@@ -8,23 +7,23 @@ using namespace std;
 
 // Accepts an adjacency list. Returns true if the graph has a negative weight cycle.
 // Pairs should be in the form {weight, destination}. Runs in O(EV).
-bool negcycle(vector<vector<pair<int, int>>> adj) {
+template<typename T>
+bool negcycle(vector<vector<pair<T, int>>> adj) {
 
-	int size = adj.size();
-	vector<int> cost(size, 0);
+    const static T inf_T = numeric_limits<T>::max();
+	int n = adj.size();
+	vector<T> c(n, 0);
 
-	bool cycle;
-	for (int v = 0; v < size; v++) {
-		cycle = 0;
-		for (int i = 0; i < size; i++)
-			for (auto edge : adj[i])
-				if (cost[edge.second] > cost[i]+edge.first) {
-					cycle = 1;
-					cost[edge.second] = cost[i]+edge.first;
-				}
-		if (!cycle) break;
+	bool cyc;
+	for (int v = 0; v < n; v++) {
+		cyc = 0;
+		for (int i = 0; i < n; i++)
+			for (auto [w, j] : adj[i])
+				if (c[i] != inf_T && c[j] > c[i]+w)
+					cyc = 1, c[j] = c[i]+w;
+		if (!cyc) break;
 	}
-	return cycle;
+	return cyc;
 }
 
 

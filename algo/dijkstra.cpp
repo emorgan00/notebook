@@ -9,7 +9,7 @@ T dijkstra(vector<vector<pair<T, int>>>& adj, int s, int e) {
     const static T inf_T = numeric_limits<T>::max();
     int n = adj.size();
     vector<bool> vis(n, 0);
-    priority_queue<pair<T, int>, vector<pair<T, int>>, greater<pair<T, int>>> heap;
+    priority_queue<pair<T, int>, vector<pair<T, int>>, greater<>> heap;
     heap.push({0, s});
 
     while (!heap.empty()) {
