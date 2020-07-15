@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// returns (b^r)%m, runs in O(logr) time.
+// returns b^r mod m, runs in O(logr) time.
 template<typename T>
 T powmod(T b, T r, T m) {
     T out = 1;

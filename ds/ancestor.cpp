@@ -5,13 +5,13 @@ using namespace std;
 
 struct ancestor {
 
-    vector<int> vin, vout;
+    vector<int> vin, vout, d;
     vector<vector<int>> &adj, p;
     int n, t = 0, e;
 
     void dfs(int i, int v) {
         vin[i] = t++;
-        p[i][0] = v;
+        p[i][0] = v, d[i] = d[v]+1;
         for (int j = 1; j <= e; j++)
             p[i][j] = p[p[i][j-1]][j-1];
         for (auto& j : adj[i])
@@ -22,8 +22,8 @@ struct ancestor {
     // accepts an adjecency list. can include or exlude parents, it works either way.
     // constructor runs in O(nlogn) time.
     ancestor(vector<vector<int>>& _adj, int root) : adj(_adj), n(_adj.size()) {
-        vin.resize(n), vout.resize(n);
-        e = ceil(log2(adj.size()));
+        vin.resize(n), vout.resize(n), d.assign(n, 0);
+        e = ceil(log2(n));
         p.assign(n, vector<int>(e+1));
         dfs(root, root);
     }
@@ -48,6 +48,11 @@ struct ancestor {
             if (!is_ancestor(p[i][k], j))
                 i = p[i][k];
         return p[i][0];
+    }
+
+    // returns the vertex one step along the path from i to j in O(logn) time.
+    int step(int i, int j) const {
+        return is_ancestor(i, j) ? ktha(j, d[j]-d[i]-1) : p[i][0];
     }
 };
 
