@@ -1,8 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-// note: this fenwick tree uses 0-based indexing.
-
 template<typename T>
 struct fenwick {
 

@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // this is for directed graphs, a modified version
 // for undirected graphs is below
 

@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Preferable to generalized range associative-function query due to a much smaller constant factor.
 
 template<typename T>

@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Accepts an adjacency matrix. Returns a matrix where M[i][j]
 // indicates whether vertex j is reachable from vertex i.
 // Runs in O(EV). Note that if adj is a DAG, this is not optimal.

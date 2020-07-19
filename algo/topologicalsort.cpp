@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Accepts an adjacency list. Assumes that the graph is connected and acyclic.
 // Runs in O(V+E).
 

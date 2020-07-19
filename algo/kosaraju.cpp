@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Accepts an adjacency list, and returns a vector of which component
 // each vertex is in. Runs in O(V+E).
 

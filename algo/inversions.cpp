@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Returns the number of pairs (i, j) such that i < j and A[i] > A[j].
 // Runs in O(nlogn). Will not mutate the array.
 

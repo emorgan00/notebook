@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // templated version of the KACTL LineContainer data structure.
 // see https://github.com/kth-competitive-programming/kactl/blob/master/content/data-structures/LineContainer.h
 

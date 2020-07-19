@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Transform the contents of [first, last) into elements of [0..N],
 // while preserving the ordering/equality relationship among indices into the data.
 // Runs in O(nlogn).

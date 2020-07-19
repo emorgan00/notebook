@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Accepts an adjecency matrix. Returns the sum of the weights of the MST.
 // Use inf to show that two vertices are NOT connected. Runs in O(V^2).
 template<typename T>

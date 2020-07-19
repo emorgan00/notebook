@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Range associative-function query data structure.
 // O(nlogn) to set up, O(1) to query.
 // Accepts an arbitrary associative function.

@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Knuth-Morris-Pratt algorithm. Returns a list of all indices at which W appears in S.
 // Runs in O(|S|+|W|) time.
 template<typename it>

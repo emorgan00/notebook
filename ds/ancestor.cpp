@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // combined data structure for various ancestor-related queries.
 
 struct ancestor {

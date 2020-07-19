@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // returns {number of connected components, vector of labels}
 // where each label is an integer from 0 to c-1 (c is number of components)
 

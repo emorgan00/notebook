@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // computes the indices of all points which
 // are members of the convex hull in O(nlogn) time.
 

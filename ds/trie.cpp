@@ -1,6 +1,3 @@
-#include <iostream>
-using namespace std;
-
 // the following implementation is for strings containing a..z
 
 struct trie {

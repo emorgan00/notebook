@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 struct suffixarray {
 
     // s = original string, a = suffix array

@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Returns a vector V where V[i] = minimum of the array from i to i+width-1.
 // Runs in O(n) time.
 

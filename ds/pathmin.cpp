@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // unionfind and rmq are used for the pathmin struct below.
 // there are some minor modifications to them, so copy over everything.
 

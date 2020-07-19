@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Accepts an adjacency list. Returns the minimum cost from s to e.
 // Pairs should be in the form {weight, destination}, runs in O(ElogV).
 template<typename T>

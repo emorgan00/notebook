@@ -1,9 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-#define gcd __gcd
-#define lcm(a, b) (a*b/__gcd(a, b))
-
 // checks if a number is prime in O(sqrt(n)) time.
 template<typename T>
 bool isprime(T n) {

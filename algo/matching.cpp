@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // computes maximum matching in a bipartite graph
 // N vertices on the left, and M vertices on the right
 template<int N, int M>

@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // ordered statistic tree using fenwick tree.
 // all operations take O(log(N)),
 // where N is the limit on size of elements

@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 template<typename T, int H, int W>
 struct matrix {
 

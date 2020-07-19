@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 
 // NEGATIVE WEIGHT CYCLE DETECTION (shortest paths further below)
 
