@@ -7,9 +7,10 @@ struct matrix {
     T M[H][W];
     matrix() { clear(); }
     matrix(bool b) { b ? ident() : clear(); }
-    matrix(vector<vector<T>> v) : matrix() {
-        for (int i = 0; i < v.size(); i++) for (int j = 0; j < v[i].size(); j++)
-            M[i][j] = v[i][j];
+
+    matrix(initializer_list<initializer_list<T>> v) : matrix() {
+        for (int i = 0; i < v.size(); i++)
+            copy(v.begin()[i].begin(), v.begin()[i].end(), M[i]);
     }
 
     T* operator[](const int i) { return M[i]; }
@@ -17,7 +18,7 @@ struct matrix {
 
     void clear() { fill(&M[0][0], &M[0][0]+sizeof(M)/sizeof(T), 0); }
     void ident() {
-        static_assert(H == W, "ident() on non-square matrix"); clear();
+        assert(H == W), clear();
         for (int i = 0; i < W; i++) M[i][i] = 1;
     }
 
