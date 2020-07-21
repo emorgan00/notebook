@@ -14,9 +14,21 @@ struct matrix {
     const T* operator[](const int i) const { return M[i]; }
 
     void clear() { fill(&M[0][0], &M[0][0]+sizeof(M)/sizeof(T), 0); }
-    void ident() {
-        assert(H == W), clear();
+    void ident() { assert(H == W), clear();
         for (int i = 0; i < W; i++) M[i][i] = 1;
+    }
+
+    friend string to_string(const matrix<T, H, W>& a) {
+        string s = "";
+        for (int i = 0; i < H; i++) {
+            s += (i == 0 ? "[" : ", ");
+            for (int j = 0; j < W; j++)
+                s += (j == 0 ? "[" : ", ")+to_string(a.M[i][j]);
+            s += "]";
+        } return s+"]";
+    }
+    friend ostream& operator<<(ostream& o, const matrix<T, H, W>& a) {
+        return o << to_string(a);
     }
 
     matrix<T, H, W>& operator+=(const matrix<T, H, W>& a) {
@@ -34,18 +46,11 @@ struct matrix {
             r.M[i][j] += a.M[i][k]*b.M[k][j];
         return r;
     }
-
-    friend string to_string(const matrix<T, H, W>& a) {
-        string out = "";
-        for (int i = 0; i < H; i++) {
-            out += (i == 0 ? "[" : ", ");
-            for (int j = 0; j < W; j++)
-                out += (j == 0 ? "[" : ", ")+to_string(a.M[i][j]);
-            out += "]";
-        }
-        return out+"]";
-    }
-    friend ostream& operator<<(ostream& out, const matrix<T, H, W>& a) {
-        return out << to_string(a);
+    // fast matrix exponentiation
+    matrix<T, H, W> operator^(const long long k) {
+        matrix<T, H, W> a = matrix(*this), r(1);
+        if (k < 0) assert(k >= 0); // if i add matrix inverse, it would get called here
+        for (long long i = 1; i <= k; i <<= 1, a = a*a) if (i&k) r = r*a;
+        return r;
     }
 };

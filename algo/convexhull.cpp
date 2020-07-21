@@ -22,7 +22,7 @@ bool ccw(pt<T> a, pt<T> b, pt<T> c) {
 template<typename T>
 vector<int> convexhull(vector<pt<T>>& p) {
     vector<int> ord(p.size()); iota(ord.begin(), ord.end(), 0);
-    sort(ord.begin(), ord.end(), [&](int i, int j){return p[i] < p[j];});
+    sort(ord.begin(), ord.end(), [&](int i, int j){return p[i].x < p[j].x;});
     pt<T> a = p[ord[0]], b = p[ord.back()];
     vector<int> u = {ord[0]}, l = {ord[0]};
     for (int j = 1; j < p.size(); j++) {
