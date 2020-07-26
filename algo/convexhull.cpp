@@ -17,7 +17,7 @@ bool ccw(pt<T> a, pt<T> b, pt<T> c) {
 }
 
 // see https://cp-algorithms.com/geometry/grahams-scan-convex-hull.html
-// (this is basically copied from there)
+// (basically copied from there, this version works with integers)
 
 template<typename T>
 vector<int> convexhull(vector<pt<T>>& p) {
