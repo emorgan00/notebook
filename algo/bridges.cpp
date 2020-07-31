@@ -28,22 +28,8 @@ struct bridges {
             }
     }
 
-    // returns an edge list of all bridges in the graph in O(V+E).
-    vector<pair<int, int>> list() {
-        vector<pair<int, int>> out;
-        for (int i = 0; i < adj.size(); i++)
-            if (low[i] == -1)
-                dfs(i, -1);
-        for (int i = 0; i < adj.size(); i++)
-            for (auto& [j, k] : adj[i])
-                if (i < j && bridge[k])
-                    out.emplace_back(i, j);
-        return out;
-    }
-
-    // returns {component vector, component-wise adjacency list} in O(V+E).
-    // the component-wise adjacency list is a forest.
-    pair<vector<int>, vector<vector<int>>> forest() {
+    // returns a component vector for biconnected components in O(V+E).
+    vector<int> components() {
         vector<int> comp(adj.size(), -1), stk;
         for (int i = 0; i < adj.size(); i++)
             if (low[i] == -1)
@@ -61,11 +47,6 @@ struct bridges {
                 }
                 c++;
             }
-        vector<vector<int>> out(c);
-        for (int i = 0; i < adj.size(); i++)
-            for (auto& [j, k] : adj[i])
-                if (bridge[k])
-                    out[comp[i]].push_back(comp[j]);
-        return {comp, out};
+        return comp;
     }
 };
