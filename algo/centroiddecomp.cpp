@@ -41,7 +41,7 @@ struct centroid {
 
     // returns the vertices of the tree ordered in a
     // pre-order dfs traversal of the centroid tree in O(VlogV)
-    vector<int> solve() {
+    vector<int> list() {
         vector<int> out, stk = {0};
         while (!stk.empty()) {
             int i = find(stk.back()); stk.pop_back();
@@ -55,7 +55,7 @@ struct centroid {
     }
 
     // returns {root, children-only adjacency list} of the centroid tree
-    pair<int, vector<vector<int>>> full_tree() {
+    pair<int, vector<vector<int>>> tree() {
         int root = find(0);
         vector<vector<int>> out(adj.size());
         vector<int> stk = {root};
