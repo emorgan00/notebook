@@ -36,9 +36,7 @@ struct matrix {
             M[i][j] *= r;
         return *this;
     }
-    friend matrix<T, H, W> operator*(const matrix<T, H, W>& a, const T& r) {
-        return matrix(a) *= r;
-    }
+    matrix<T, H, W> operator*(const T& r) { return matrix(*this) *= r; }
     friend matrix<T, H, W> operator*(const T& r, const matrix<T, H, W>& a) {
         return matrix(a) *= r;
     }
@@ -48,25 +46,23 @@ struct matrix {
             M[i][j] += a.M[i][j];
         return *this;
     }
-    friend matrix<T, H, W> operator+(const matrix<T, H, W>& a, const matrix<T, H, W>& b) {
-        return matrix(a) += b;
-    }
-    template<int C>
-    friend matrix<T, H, C> operator*(const matrix<T, H, W>& a, const matrix<T, W, C>& b) {
+    template<int C> matrix<T, H, C> operator*(const matrix<T, W, C>& b) {
         matrix<T, H, C> r(0);
-        for (int i = 0; i < H; i++) for (int j = 0; j < C; j++) for (int k = 0; k < W; k++)
-            r.M[i][j] += a.M[i][k]*b.M[k][j];
+        for (int i = 0; i < H; i++) for (int j = 0; j < C; j++)
+            for (int k = 0; k < W; k++) r.M[i][j] += M[i][k]*b.M[k][j];
         return r;
     }
 
+    matrix<T, H, W> operator+(const matrix<T, H, W>& b) { return matrix(*this) += b; }
+    matrix<T, H, W> operator-(const matrix<T, H, W>& b) { return matrix(*this) += -b; }
+    matrix<T, H, W> operator+() { return matrix(*this); }
+    matrix<T, H, W> operator-() { return matrix(*this) *= -1; }
+
     // O(n^3logk) matrix exponentiation
     matrix<T, H, W> operator^(long long k) { assert(H == W);
-        matrix<T, H, W> a(*this), r(1);
-        if (k < 0) a = inv(a), k = -k;
-        if (k == 1) return a;
-        if (k < 5) { while (k--) r = r*a; return r; }
-        for (long long i = 1; i <= k; i <<= 1, a = a*a) if (i&k) r = r*a;
-        return r;
+        if (k < 0) return inv(*this)^-k;
+        if (k < 2) return k == 0 ? 1 : matrix(*this);
+        return k&1 ? *this*(*this^(k-1)) : (*this**this)^(k>>1);
     }
 
     // O(n^3) matrix determinant, uses operator/
