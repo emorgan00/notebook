@@ -63,6 +63,8 @@ struct matrix {
     matrix<T, H, W> operator^(long long k) { assert(H == W);
         matrix<T, H, W> a(*this), r(1);
         if (k < 0) a = inv(a), k = -k;
+        if (k == 1) return a;
+        if (k < 5) { while (k--) r = r*a; return r; }
         for (long long i = 1; i <= k; i <<= 1, a = a*a) if (i&k) r = r*a;
         return r;
     }
