@@ -8,7 +8,7 @@ struct rmq {
     // runs in O(nlogn).
     rmq(vector<T>& data) {
         int n = data.size();
-        int log2n = ceil(log2(n));
+        int log2n = n == 0 ? 0 : ceil(log2(n));
         tree.assign(log2n+1, vector<T>(n));
         tree[0] = data;
         for (int i = 1; i <= log2n; i++)
