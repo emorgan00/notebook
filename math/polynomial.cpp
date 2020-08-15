@@ -17,29 +17,29 @@ struct poly : vector<modint<M>> {
         return r;
     }
 
+    poly substr(int l, int r) const {
+        poly p(max(0, r-l), 0);
+        int l1 = max(0, min(int(v::size()), l));
+        int r1 = min(int(v::size()), max(l, r));
+        copy(v::begin()+l1, v::begin()+r1, p.begin()+max(0, -l));
+        return p;
+    }
+
     poly& operator+=(const poly& p) {
         if (v::size() < p.size()) v::resize(p.size());
-        auto it = v::begin(); for (const T& a : p) *(it++) += a; return *this;
+        auto it = v::begin(); for (const T& a : p) *(it++) += a;
+        return *this;
     }
     poly& operator-=(const poly& p) { return *this += -p; }
     poly& operator*=(const T& x) { for (T& a : *this) a *= x; return *this; }
+    poly& operator/=(const T& x) { *this *= 1/x; return *this; }
     poly operator+(const poly& p) const { return poly(*this) += p; }
     poly operator-(const poly& p) const { return poly(*this) -= p; }
     poly operator+() const { return poly(*this); }
     poly operator-() const { return poly(*this) *= -1; }
     poly operator*(const T& x) const { return poly(*this) *= x; }
     friend poly operator*(const T& x, const poly& p) { return p*x; }
-
-    // multiply by x^-i, discarding too small terms
-    poly& operator>>=(const size_t i) {
-        v::erase(v::begin(), v::size() < i ? v::end() : v::begin()+i); return *this;
-    }
-    // multiply by x^i
-    poly& operator<<=(const size_t i) {
-        v::insert(v::begin(), i, 0); return *this;
-    }
-    poly operator>>(const size_t i) const { return poly(*this) >>= i; }
-    poly operator<<(const size_t i) const { return poly(*this) <<= i; }
+    poly operator/(const T& x) const { return poly(*this) /= x; }
 
     // memoized roots of unity, source: Um_nik
     static array<vector<T>, 2>& compute_roots(int k = 21) {
@@ -61,7 +61,7 @@ struct poly : vector<modint<M>> {
     void ntt(bool inv = 0) {
         int n = v::size(); if (n == 1) return;
         auto& r = compute_roots()[inv];
-        auto f = this->data();
+        auto f = v::data();
         if (inv) {
             for (int i = 1; i < n; i <<= 1)
                 for (int j = 0; j < n; j += i*2)
@@ -88,9 +88,27 @@ struct poly : vector<modint<M>> {
     }
     poly operator*(const poly& p) const { return poly(*this) *= p; }
 
-    // O(nlognlogk) exponentation
-    poly exp(const ll k) const { assert(k >= 0);
+    // inverse polynomial mod x^n, UB if 0 is a root
+    poly inv(size_t n) const {
+        poly p = {1/v::data()[0]};
+        for (size_t i = 1; i < n; i <<= 1)
+            p -= (p*(p*substr(0, 2*i)).substr(i, 2*i)).substr(-i, i);
+        p.resize(n); return p;
+    }
+
+    // square root polynomial mod x^n
+    poly sqrt(size_t n) const {
+        poly p = {1};
+        for (size_t i = 1; i < n; i <<= 1)
+            p = (p.substr(0, 2*i)+*this*p.inv(n))/2;
+        p.resize(n); return p;
+    }
+
+    // exponentiation to the k power mod x^n
+    poly exp(size_t n, size_t k) const {
+        if (k < 0) return inv(n).exp(n, -k);
         if (k < 2) return k == 0 ? poly({1}) : poly(*this);
-        return k&1 ? *this*(this->exp(k-1)) : (*this**this).exp(k>>1);
+        if (k&1) return (*this*(this->exp(n, k-1))).substr(0, n);
+        return (*this**this).substr(0, n).exp(n, k>>1);
     }
 };

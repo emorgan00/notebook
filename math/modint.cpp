@@ -2,7 +2,8 @@ template<ll M>
 struct modint {
 
     static ll reduce(ll n) {
-        return n%M;
+        constexpr static ll b = -1ull/M;
+        ll r = n-(ll)(__uint128_t(b)*n>>64)*M; return r >= M ? r-M : r;
     }
 
     static ll inv(ll n) {
@@ -12,7 +13,7 @@ struct modint {
         return r;
     }
 
-    ll v; modint(ll n = 0) : v(reduce(n)) {}
+    ll v; modint(ll n = 0) : v(reduce(n)) { v += (M&0-(v<0)); }
     
     friend string to_string(const modint& n) { return to_string(n.v); }
     friend istream& operator>>(istream& i, modint& n) { return i >> n.v; }
