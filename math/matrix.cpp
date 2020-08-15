@@ -76,6 +76,8 @@ struct matrix {
                 for (int k = i; k < H; k++) r.M[j][k] -= r.M[i][k]*c;
         } } return d;
     }
+    T det() { return det(*this); }
+    
     // O(n^3) matrix inversion, uses operator/, undefined behavior if det(a) == 0
     friend matrix<T, H, W> inv(const matrix<T, H, W>& a) { assert(H == W);
         matrix<T, H, W> b(1), r(a);
@@ -92,4 +94,5 @@ struct matrix {
                 for (int k = 0; k < H; k++) b.M[j][k] -= b.M[i][k]*c;
         } } return b;
     }
+    matrix<T, H, W> inv() { return inv(*this); }
 };
