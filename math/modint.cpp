@@ -29,8 +29,8 @@ struct modint {
     friend modint operator/(const modint n, const modint m) { return modint(n) /= m; }
 
     // O(logk) modular exponentiation
-    modint exp(const ll k) const {
-        if (k < 1) return k == 0 ? 1 : modint(inv(this->v)).exp(-k);
-        return k&1 ? *this*(this->exp(k-1)) : (*this**this).exp(k>>1);
+    modint pow(const ll k) const {
+        if (k < 1) return k == 0 ? 1 : modint(inv(this->v)).pow(-k);
+        return k&1 ? *this*(this->pow(k-1)) : (*this**this).pow(k>>1);
     }
 };

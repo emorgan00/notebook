@@ -58,6 +58,13 @@ struct matrix {
     matrix<T, H, W> operator+() { return matrix(*this); }
     matrix<T, H, W> operator-() { return matrix(*this) *= -1; }
 
+    matrix<T, W, H> transpose() const {
+        matrix<T, W, H> r(0);
+        for (int i = 0; i < H; i++) for (int j = 0; j < W; j++)
+            r.M[i][j] = M[j][i];
+        return r;
+    }
+
     // O(n^3logk) matrix exponentiation
     matrix<T, H, W> operator^(long long k) { assert(H == W);
         if (k < 0) return inv(*this)^-k;
@@ -66,8 +73,8 @@ struct matrix {
     }
 
     // O(n^3) matrix determinant, uses operator/
-    friend T det(const matrix<T, H, W>& a) { assert(H == W);
-        matrix<T, H, W> r(a); T d = 1;
+    T det() const { assert(H == W);
+        matrix<T, H, W> r(*this); T d = 1;
         for (int i = 0; i < H; i++) {
             if (r.M[i][i] == 0) for (int j = i+1; j < H; j++) if (r.M[j][i] != 0)
                 { swap(r.M[i], r.M[j]); d = -d; break; }
@@ -76,11 +83,10 @@ struct matrix {
                 for (int k = i; k < H; k++) r.M[j][k] -= r.M[i][k]*c;
         } } return d;
     }
-    T det() { return det(*this); }
     
-    // O(n^3) matrix inversion, uses operator/, undefined behavior if det(a) == 0
-    friend matrix<T, H, W> inv(const matrix<T, H, W>& a) { assert(H == W);
-        matrix<T, H, W> b(1), r(a);
+    // O(n^3) matrix inversion, uses operator/, undefined behavior if det(*this) == 0
+    matrix<T, H, W> inv() const { assert(H == W);
+        matrix<T, H, W> b(1), r(*this);
         for (int i = 0; i < H; i++) {
             if (r.M[i][i] == 0) for (int j = i+1; j < H; j++) if (r.M[j][i] != 0)
                 { swap(b.M[i], b.M[j]), swap(r.M[i], r.M[j]); break; }
@@ -94,5 +100,4 @@ struct matrix {
                 for (int k = 0; k < H; k++) b.M[j][k] -= b.M[i][k]*c;
         } } return b;
     }
-    matrix<T, H, W> inv() { return inv(*this); }
 };

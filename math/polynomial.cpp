@@ -45,11 +45,11 @@ struct poly : vector<modint<M>> {
     static array<vector<T>, 2>& compute_roots(int k = 21) {
         static array<vector<T>, 2> r;
         if (r[0].size() >= 1<<k) return r;
-        T p = 2; while (p.exp(M>>1).v == 1) p += 1;
+        T p = 2; while (p.pow(M>>1).v == 1) p += 1;
         r[0].resize(1<<k, 1), r[1].resize(1<<k, 1);
         for (int w = 0; w < k; w++) {
             int x = (1<<w)-1, t = (M-1)>>w;
-            T g = p.exp(t), ig = p.exp(M-1-t);
+            T g = p.pow(t), ig = p.pow(M-1-t);
             for (int i = 0; i < x; i++) {
                 r[0][x+i+1] = g*r[0][x+i];
                 r[1][x+i+1] = ig*r[1][x+i];
@@ -105,11 +105,11 @@ struct poly : vector<modint<M>> {
     }
 
     // exponentiation to the k power mod x^n
-    poly exp(size_t n, size_t k) const {
-        if (k < 0) return inv(n).exp(n, -k);
+    poly pow(size_t n, size_t k) const {
+        if (k < 0) return inv(n).pow(n, -k);
         if (k < 2) return k == 0 ? poly({1}) : poly(*this);
-        if (k&1) return (*this*(this->exp(n, k-1))).substr(0, n);
-        return (*this**this).substr(0, n).exp(n, k>>1);
+        if (k&1) return (*this*(this->pow(n, k-1))).substr(0, n);
+        return (*this**this).substr(0, n).pow(n, k>>1);
     }
 
     // differentiation
