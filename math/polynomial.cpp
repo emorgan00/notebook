@@ -111,4 +111,16 @@ struct poly : vector<modint<M>> {
         if (k&1) return (*this*(this->exp(n, k-1))).substr(0, n);
         return (*this**this).substr(0, n).exp(n, k>>1);
     }
+
+    // differentiation
+    poly diff() {
+        poly p = substr(1, v::size()); T i = 0;
+        for (auto& x : p) x *= i += 1; return p;
+    }
+
+    // integration with C = 0
+    poly inte() {
+        poly p = substr(-1, v::size()); T i = -1;
+        for (auto& x : p) x /= i += 1; return p;
+    }
 };
