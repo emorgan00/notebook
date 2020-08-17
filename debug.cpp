@@ -56,6 +56,11 @@ string to_string(A v) {
     res += "}";
     return res;
 }
+
+template <typename A>
+string to_string(complex<A> v) {
+    return to_string(v.real()) + "+" + to_string(v.imag()) + "i";
+}
  
 template <typename A, typename B>
 string to_string(pair<A, B> p) {
