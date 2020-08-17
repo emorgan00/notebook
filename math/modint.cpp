@@ -27,6 +27,8 @@ struct modint {
     friend modint operator-(const modint n, const modint m) { return modint(n) -= m; }
     friend modint operator*(const modint n, const modint m) { return modint(n) *= m; }
     friend modint operator/(const modint n, const modint m) { return modint(n) /= m; }
+    friend bool operator==(const modint n, const modint m) { return n.v == m.v; }
+    friend bool operator!=(const modint n, const modint m) { return n.v != m.v; }
 
     // O(logk) modular exponentiation
     modint pow(const ll k) const {

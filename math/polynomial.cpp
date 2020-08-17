@@ -18,11 +18,11 @@ struct poly : vector<modint<M>> {
     }
 
     poly substr(int l, int r) const {
-        poly p(max(0, r-l), 0);
-        int l1 = max(0, min(int(v::size()), l));
+        poly p(abs(r-l), 0);
+        int l1 = max(0, min(int(v::size()), min(l, r)));
         int r1 = min(int(v::size()), max(l, r));
-        copy(v::begin()+l1, v::begin()+r1, p.begin()+max(0, -l));
-        return p;
+        copy(v::begin()+l1, v::begin()+r1, p.begin()+max(0, -min(l, r)));
+        if (l > r) reverse(p.begin(), p.end()); return p;
     }
 
     poly& operator+=(const poly& p) {
@@ -88,8 +88,8 @@ struct poly : vector<modint<M>> {
     }
     poly operator*(const poly& p) const { return poly(*this) *= p; }
 
-    // inverse polynomial mod x^n, UB if 0 is a root
-    poly inv(size_t n) const {
+    // inverse polynomial mod x^n
+    poly inv(size_t n) const { assert(v::data()[0] != 0);
         poly p = {1/v::data()[0]};
         for (size_t i = 1; i < n; i <<= 1)
             p -= (p*(p*substr(0, 2*i)).substr(i, 2*i)).substr(-i, i);
@@ -104,23 +104,36 @@ struct poly : vector<modint<M>> {
         p.resize(n); return p;
     }
 
+    // differentiation
+    poly diff() const {
+        poly p = substr(1, v::size()); T i = 0;
+        for (auto& x : p) x *= i += 1; return p;
+    }
+
+    // integration with C = 0
+    poly inte() const {
+        poly p = substr(-1, v::size()); T i = -1;
+        for (auto& x : p) x /= i += 1; return p;
+    }
+
+    // log(this) mod x^n
+    poly log(size_t n) const { assert(v::data()[0] == 1);
+        return (diff().substr(0, n)*inv(n)).inte().substr(0, n);
+    }
+
+    // e^this mod x^n
+    poly exp(size_t n) const { assert(v::data()[0] == 0);
+        poly p = {1};
+        for (size_t i = 1; i < n; i <<= 1)
+            p -= (p*(p.log(2*i).substr(i, 2*i)-substr(i, 2*i))).substr(-i, i);
+        return p;
+    }
+
     // exponentiation to the k power mod x^n
     poly pow(size_t n, size_t k) const {
         if (k < 0) return inv(n).pow(n, -k);
         if (k < 2) return k == 0 ? poly({1}) : poly(*this);
         if (k&1) return (*this*(this->pow(n, k-1))).substr(0, n);
         return (*this**this).substr(0, n).pow(n, k>>1);
-    }
-
-    // differentiation
-    poly diff() {
-        poly p = substr(1, v::size()); T i = 0;
-        for (auto& x : p) x *= i += 1; return p;
-    }
-
-    // integration with C = 0
-    poly inte() {
-        poly p = substr(-1, v::size()); T i = -1;
-        for (auto& x : p) x /= i += 1; return p;
     }
 };
