@@ -16,17 +16,11 @@ struct matcher {
         if (vis[i]) return 0;
         vis[i] = 1;
         for (int j : adj[i])
-            if (R[j] == -1) {
-                L[i] = j;
-                R[j] = i;
-                return 1;
-            }
+            if (R[j] == -1)
+                return L[i] = j, R[j] = i, 1;
         for (int j : adj[i])
-            if (dfs(R[j])) {
-                L[i] = j;
-                R[j] = i;
-                return 1;
-            }
+            if (dfs(R[j]))
+                return L[i] = j, R[j] = i, 1;
         return 0;
     }
 
@@ -34,15 +28,14 @@ struct matcher {
     vector<pair<int, int>> solve() {
         iota(ord, ord+N, 0);
         random_shuffle(ord, ord+N);
-        fill(L, L+N, -1);
-        fill(R, R+M, -1);
+        fill(L, L+N, -1), fill(R, R+M, -1);
         bool v = 1;
         while (v) {
             v = 0;
             fill(vis, vis+N, 0);
             for (int i : ord)
                 if (!vis[i] && L[i] == -1)
-                    v |= dfs(i);
+                    v = v || dfs(i);
         }
         vector<pair<int, int>> out;
         for (int i = 0; i < N; i++)

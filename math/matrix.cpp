@@ -66,10 +66,10 @@ struct matrix {
     }
 
     // O(n^3logk) matrix exponentiation
-    matrix<T, H, W> operator^(long long k) { assert(H == W);
-        if (k < 0) return inv(*this)^-k;
+    matrix<T, H, W> pow(long long k) { assert(H == W);
+        if (k < 0) return this->inv().pow(-k);
         if (k < 2) return k == 0 ? 1 : matrix(*this);
-        return k&1 ? *this*(*this^(k-1)) : (*this**this)^(k>>1);
+        return k&1 ? *this*(this->pow(k-1)) : (*this**this).pow(k>>1);
     }
 
     // O(n^3) matrix determinant, uses operator/
