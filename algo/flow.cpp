@@ -21,12 +21,9 @@ struct flow {
         fill(l, l+N, -1), l[s] = 0;
         while (!q.empty() && l[t] == -1) {
             int v = q.front(); q.pop();
-            for (auto& e : adj[v]) {
-                if (l[e.v] == -1 && e.f < e.w && (!SCALING || e.w - e.f >= k)) {
-                    q.push(e.v);
-                    l[e.v] = l[v] + 1;
-                }
-            }
+            for (auto& e : adj[v])
+                if (l[e.v] == -1 && e.f < e.w && (!SCALING || e.w - e.f >= k))
+                    q.push(e.v), l[e.v] = l[v] + 1;
         }
         return l[t] != -1;
     }
@@ -39,8 +36,7 @@ struct flow {
             if (l[e.v] != l[v] + 1)
                 continue;
             if (T x = dfs(e.v, min(f, e.w - e.f))) {
-                e.f += x;
-                adj[e.v][e.u].f -= x;
+                e.f += x, adj[e.v][e.u].f -= x;
                 return x;
             }
         }
@@ -56,6 +52,22 @@ struct flow {
                 fill(p, p+N, 0);
                 while (T x = dfs(s, inf_T)) out += x;
             }
+        return out;
+    }
+
+    // after calling solve(), return a component vector C s.t. C[i] \in {0, 1}
+    // and i is reachable from s iff C[i] = 1. any edge from a 1 to a 0 is in the min cut
+    vector<bool> cut() {
+        vector<bool> out(N, 0); out[s] = 1;
+        queue<int> q({s});
+        while (!q.empty()) {
+            int v = q.front(); q.pop();
+            for (auto& e : adj[v]) {
+                debug(v, e.v, e.f, e.w);
+                if (e.f < e.w && !out[e.v])
+                    out[e.v] = 1, q.push(e.v);
+            }
+        }
         return out;
     }
 };

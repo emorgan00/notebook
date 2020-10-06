@@ -10,8 +10,7 @@ void compress(it1 first, it1 last, it2 result) {
         m[*i].push_back(result+(i-first));
     int t = 0;
     for (auto& [x, v] : m) {
-        for (auto& i : v)
-            *i = t;
+        for (auto& i : v) *i = t;
         t++;
     }
 }
@@ -24,8 +23,7 @@ void compress(it1 first, it1 last, it2 result, cmp ord) {
         m[*i].push_back(result+(i-first));
     int t = 0;
     for (auto& [x, v] : m) {
-        for (auto& i : v)
-            *i = t;
+        for (auto& i : v) *i = t;
         t++;
     }
 }

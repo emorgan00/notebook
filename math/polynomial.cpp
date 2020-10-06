@@ -41,7 +41,7 @@ struct poly : vector<modint<M>> {
     friend poly operator*(const T& x, const poly& p) { return p*x; }
     poly operator/(const T& x) const { return poly(*this) /= x; }
 
-    // memoized roots of unity, source: Um_nik
+    // memoized roots of unity
     static array<vector<T>, 2>& compute_roots(int k = 21) {
         static array<vector<T>, 2> r;
         if (r[0].size() >= 1<<k) return r;
@@ -57,7 +57,7 @@ struct poly : vector<modint<M>> {
         } return r;
     }
 
-    // number theoretic transform in place, runs in O(nlogn), source: Um_nik
+    // number theoretic transform in place, runs in O(nlogn)
     void ntt(bool inv = 0) {
         int n = v::size(); if (n == 1) return;
         auto& r = compute_roots()[inv];

@@ -77,7 +77,7 @@ struct matrix {
         matrix<T, H, W> r(*this); T d = 1;
         for (int i = 0; i < H; i++) {
             if (r.M[i][i] == 0) for (int j = i+1; j < H; j++) if (r.M[j][i] != 0)
-                { swap(r.M[i], r.M[j]); d = -d; break; }
+                { swap(r.M[i], r.M[j]); d = 0-d; break; }
             d *= r.M[i][i]; if (r.M[i][i] == 0) return 0;
             for (int j = i+1; j < H; j++) { T c = r.M[j][i]/r.M[i][i];
                 for (int k = i; k < H; k++) r.M[j][k] -= r.M[i][k]*c;

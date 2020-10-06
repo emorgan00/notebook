@@ -4,8 +4,7 @@ template<int N, int M>
 struct matcher {
 
     vector<int> adj[N];
-    int ord[N], L[N], R[M];
-    bool vis[N];
+    int ord[N], vis[N], R[N], t;
 
     // add an edge between i on the left, and j on the right
     void edge(int i, int j) {
@@ -13,14 +12,13 @@ struct matcher {
     }
 
     bool dfs(int i) {
-        if (vis[i]) return 0;
-        vis[i] = 1;
+        vis[i] = t;
         for (int j : adj[i])
             if (R[j] == -1)
-                return L[i] = j, R[j] = i, 1;
+                return R[j] = i, 1;
         for (int j : adj[i])
-            if (dfs(R[j]))
-                return L[i] = j, R[j] = i, 1;
+            if (vis[R[j]] < t && dfs(R[j]))
+                return R[j] = i, 1;
         return 0;
     }
 
@@ -28,19 +26,14 @@ struct matcher {
     vector<pair<int, int>> solve() {
         iota(ord, ord+N, 0);
         random_shuffle(ord, ord+N);
-        fill(L, L+N, -1), fill(R, R+M, -1);
-        bool v = 1;
-        while (v) {
-            v = 0;
-            fill(vis, vis+N, 0);
-            for (int i : ord)
-                if (!vis[i] && L[i] == -1)
-                    v = v || dfs(i);
-        }
+        fill(R, R+M, -1); t = 0;
+        for (int i = 0; i < N; i++)
+            if (!dfs(i)) break;
+            else t++;
         vector<pair<int, int>> out;
         for (int i = 0; i < N; i++)
-            if (L[i] != -1)
-                out.emplace_back(i, L[i]);
+            if (R[i] != -1)
+                out.emplace_back(R[i], i);
         return out;
     }
 };

@@ -29,6 +29,10 @@ struct modint {
     friend modint operator/(const modint n, const modint m) { return modint(n) /= m; }
     friend bool operator==(const modint n, const modint m) { return n.v == m.v; }
     friend bool operator!=(const modint n, const modint m) { return n.v != m.v; }
+    modint& operator++() { return *this += 1; }
+    modint& operator--() { return *this -= 1; }
+    modint operator++(int) { modint t = *this; return *this += 1, t; }
+    modint operator--(int) { modint t = *this; return *this -= 1, t; }
 
     // O(logk) modular exponentiation
     modint pow(const ll k) const {
