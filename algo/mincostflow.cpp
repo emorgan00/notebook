@@ -48,7 +48,7 @@ struct mincostflow {
     }
 
     // compute the maximum flow from s to t, and the minimum cost needed to do it, one-time use.
-    // Dinic's algorithm, runs in O(V^2E), expected O(VE) on random sparse graphs
+    // Dinic's algorithm + SPFA, complexity is O(?????)
     pair<T, T> solve(int _s, int _t) {
         s = _s, t = _t; T f = 0, c = 0;
         while (spfa()) {
