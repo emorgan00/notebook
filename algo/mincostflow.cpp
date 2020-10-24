@@ -6,7 +6,7 @@ struct mincostflow {
 
     struct flow_edge { int v, u; T f, w, c; };
     vector<flow_edge> adj[N];
-    T l[N]; int p[N], pv[N], pu[N], vis[N], s, t;
+    T l[N]; int p[N], vis[N], s, t;
 
     // add an edge from i to j with capacity w and cost per unit flow c
     void edge(int i, int j, T w, T c, bool directed = true) {
@@ -32,32 +32,21 @@ struct mincostflow {
         return l[t] != inf_T;
     }
 
-    T dfs(int v, T f) {
-        if (v == t || !f)
-            return f;
-        for (; p[v] < adj[v].size(); p[v]++) {
-            auto& e = adj[v][p[v]];
-            if (v != pv[e.v] || p[v] != pu[e.v])
-                continue;
-            if (T x = dfs(e.v, min(f, e.w - e.f))) {
-                e.f += x, adj[e.v][e.u].f -= x;
-                return x;
-            }
-        }
-        return 0;
-    }
-
     // compute the maximum flow from s to t, and the minimum cost needed to do it, one-time use.
-    // Dinic's algorithm + SPFA, complexity is O(?????)
+    // SPFA + Ford, complexity is O(?????)
+    // negative cost cycles in the original graph break it
     pair<T, T> solve(int _s, int _t) {
         s = _s, t = _t; T f = 0, c = 0;
         while (spfa()) {
-            fill(p, p+N, 0);
-            while (T x = dfs(s, inf_T)) f += x;
+            T x = inf_T;
+            for (int v = t; v != s; v = adj[v][p[v]].v)
+                x = min(x, adj[v][p[v]].w-adj[v][p[v]].f);
+            for (int v = t; v != s; v = adj[v][p[v]].v) {
+                auto& e = adj[v][p[v]];
+                c += e.c*x, e.f -= x, adj[e.v][e.u].f += x;
+            }
+            f += x;
         }
-        for (int v = 0; v < N; v++)
-            for (auto& e : adj[v])
-                c += e.c*e.f;
         return {f, c/2};
     }
 
