@@ -6,7 +6,7 @@ struct mincostflow {
 
     struct flow_edge { int v, u; T f, w, c; };
     vector<flow_edge> adj[N];
-    T l[N]; int p[N], pv[N], pi[N], vis[N], s, t;
+    T l[N]; int p[N], pv[N], pu[N], vis[N], s, t;
 
     // add an edge from i to j with capacity w and cost per unit flow c
     void edge(int i, int j, T w, T c, bool directed = true) {
@@ -24,7 +24,7 @@ struct mincostflow {
             for (int i = 0; i < adj[v].size(); i++) {
                 auto& e = adj[v][i];
                 if (l[v] != inf_T && e.f < e.w && l[v]+e.c < l[e.v]) {
-                    l[e.v] = l[v]+e.c, pv[e.v] = v, pi[e.v] = i;
+                    l[e.v] = l[v]+e.c, pv[e.v] = v, pu[e.v] = i;
                     if (!vis[e.v]) q.push(e.v), vis[e.v] = 1;
                 }
             }
@@ -37,7 +37,7 @@ struct mincostflow {
             return f;
         for (; p[v] < adj[v].size(); p[v]++) {
             auto& e = adj[v][p[v]];
-            if (v != pv[e.v] || p[v] != pi[e.v])
+            if (v != pv[e.v] || p[v] != pu[e.v])
                 continue;
             if (T x = dfs(e.v, min(f, e.w - e.f))) {
                 e.f += x, adj[e.v][e.u].f -= x;
