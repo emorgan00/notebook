@@ -1,4 +1,3 @@
-// computes maximum flow through a weighted directed graph
 // N vertices, flow is measured with type T
 template<int N, typename T>
 struct flow {
@@ -10,7 +9,7 @@ struct flow {
     vector<flow_edge> adj[N];
     int l[N], p[N], s, t; T k;
 
-    // add an edge from i to j with weight w
+    // add an edge from i to j with capacity w
     void edge(int i, int j, T w, bool directed = true) {
         adj[i].push_back({j, int(adj[j].size()), 0, w});
         adj[j].push_back({i, int(adj[i].size())-1, 0, directed ? 0 : w});
@@ -62,11 +61,9 @@ struct flow {
         queue<int> q({s});
         while (!q.empty()) {
             int v = q.front(); q.pop();
-            for (auto& e : adj[v]) {
-                debug(v, e.v, e.f, e.w);
+            for (auto& e : adj[v])
                 if (e.f < e.w && !out[e.v])
                     out[e.v] = 1, q.push(e.v);
-            }
         }
         return out;
     }

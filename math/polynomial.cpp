@@ -137,3 +137,5 @@ struct poly : vector<modint<M>> {
         return (*this**this).substr(0, n).pow(n, k>>1);
     }
 };
+
+// 998244353
