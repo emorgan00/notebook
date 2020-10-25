@@ -2,8 +2,9 @@
 template<int N, typename T>
 struct mincostflow {
 
-    const T inf_T = numeric_limits<T>::max()/100000;
+    const T inf_T = numeric_limits<T>::max();
     const bool CYCLIC = true; // false will usually make it run faster, but requires a DAG
+    // when working with floating point types, all comparisons below should be given a tolerance of epsilon
 
     struct flow_edge { int v, u; T f, w, c; };
     vector<flow_edge> adj[N];
@@ -26,6 +27,23 @@ struct mincostflow {
         return vis[v] = 1, pot[v]; 
     }
 
+    bool dij() {
+        fill(l, l+N, inf_T), pq.push({l[s] = 0, s});
+        fill(vis, vis+N, 0);
+        while (!pq.empty()) {
+            auto [c, v] = pq.top(); pq.pop();
+            if (vis[v]) continue; vis[v] = 1;
+            for (auto& e : adj[v]) {
+                T d = e.c+pot[v]-pot[e.v];
+                if (l[v] != inf_T && e.f < e.w && c+d < l[e.v])
+                    p[e.v] = e.u, pq.push({l[e.v] = c+d, e.v});
+            }
+        }
+        for (int i = 0; i < N; i++)
+            if (l[i] != inf_T) pot[i] += l[i];
+        return l[t] != inf_T;
+    }
+
     bool spfa() {
         fill(l, l+N, inf_T), l[s] = 0;
         queue<int> q({s});
@@ -38,22 +56,6 @@ struct mincostflow {
                     if (!vis[e.v]) q.push(e.v), vis[e.v] = 1;
                 }
         }
-        return l[t] != inf_T;
-    }
-
-    bool dij() {
-        fill(l, l+N, inf_T), pq.push({l[s] = 0, s});
-        while (!pq.empty()) {
-            auto [c, v] = pq.top(); pq.pop();
-            if (l[v] < c) continue;
-            for (auto& e : adj[v]) {
-                T d = e.c+pot[v]-pot[e.v];
-                if (l[v] != inf_T && e.f < e.w && c+d < l[e.v])
-                    p[e.v] = e.u, pq.push({l[e.v] = c+d, e.v});
-            }
-        }
-        for (int i = 0; i < N; i++)
-            if (l[i] != inf_T) pot[i] += l[i];
         return l[t] != inf_T;
     }
 
