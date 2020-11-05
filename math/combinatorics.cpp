@@ -31,13 +31,3 @@ T choose(T n, T k, T m) {
     }
     return (a*inv(b, m))%m;
 }
-
-// returns S(n, k) mod m (stirling number of the second kind) in O(klogn) time.
-template<typename T>
-T stirling2(T n, T k, T m) {
-    T a = 1, b = 1;
-    for (int i = 0; i < k; i++) {
-        // ill finish it later
-    }
-    return (a*inv(b, m))%m;
-}

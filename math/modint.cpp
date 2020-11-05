@@ -15,9 +15,11 @@ struct modint {
 
     ll v; modint(ll n = 0) : v(reduce(n)) { v += (M&0-(v<0)); }
     
-    friend string to_string(const modint& n) { return to_string(n.v); }
+    friend string to_string(const modint n) { return to_string(n.v); }
     friend istream& operator>>(istream& i, modint& n) { return i >> n.v; }
-    friend ostream& operator<<(ostream& o, const modint& n) { return o << n.v; }
+    friend ostream& operator<<(ostream& o, const modint n) { return o << n.v; }
+    template<typename T> operator T() { return T(v); }
+    operator ll() { return v; }
 
     modint& operator+=(const modint n) { v += n.v; v -= (M&0-(v>=M)); return *this; }
     modint& operator-=(const modint n) { v -= n.v; v += (M&0-(v<0)); return *this; }
@@ -29,6 +31,10 @@ struct modint {
     friend modint operator/(const modint n, const modint m) { return modint(n) /= m; }
     friend bool operator==(const modint n, const modint m) { return n.v == m.v; }
     friend bool operator!=(const modint n, const modint m) { return n.v != m.v; }
+    friend bool operator<(const modint n, const modint m) { return n.v < m.v; }
+    friend bool operator<=(const modint n, const modint m) { return n.v <= m.v; }
+    friend bool operator>(const modint n, const modint m) { return n.v > m.v; }
+    friend bool operator>=(const modint n, const modint m) { return n.v >= m.v; }
     modint& operator++() { return *this += 1; }
     modint& operator--() { return *this -= 1; }
     modint operator++(int) { modint t = *this; return *this += 1, t; }
