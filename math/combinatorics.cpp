@@ -24,8 +24,7 @@ T inv(T a, T m) {
 template<typename T>
 T choose(T n, T k) {
     T a = 1, b = 1, r = n;
-    k = min(k, n-k);
-    for (T d = 1; d <= k; d++, r--)
+    for (T d = 1; d <= min(k, n-k); d++, r--)
         a *= r, b *= d;
     return a/b;
 }
@@ -34,10 +33,7 @@ T choose(T n, T k) {
 template<typename T>
 T choosemod(T n, T k, T m) {
     T a = 1, b = 1, r = n;
-    k = min(k, n-k);
-    for (T d = 1; d <= k; d++, r--) {
-        a = (a*r)%m;
-        b = (b*d)%m;
-    }
+    for (T d = 1; d <= min(k, n-k); d++, r--)
+        a = (a*r)%m, b = (b*d)%m;
     return (a*inv(b, m))%m;
 }
