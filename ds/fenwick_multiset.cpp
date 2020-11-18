@@ -2,21 +2,22 @@
 // all operations take O(log(N)),
 // where N is the limit on size of elements
 
-template<int N>
+template<int N, typename T = int>
 struct fenwick_multiset {
 
-    int s = 0, tree[N+1] = {};
-    int size() const { return s; }
+    T s = 0, tree[N+1];
+    T size() const { return s; }
+    fenwick_multiset() { fill(tree, tree+N+1, 0); }
     
     // insert x into the set with multiplicity k
-    void insert(int x, const int k = 1) {
+    void insert(int x, const T k = 1) {
         for (x++; x <= N; x += x & -x)
             tree[x] += k;
         s += k;
     }
 
     // remove x from the set with multiplicity k
-    void remove(int x, const int k = 1) {
+    void remove(int x, const T k = 1) {
         for (x++; x <= N; x += x & -x)
             tree[x] -= k;
         s -= k;
@@ -24,8 +25,8 @@ struct fenwick_multiset {
 
     // returns the number of elements in
     // the set which are strictly lower than x
-    int index(int x) const {
-        int i = 0;
+    T index(int x) const {
+        T i = 0;
         for (; x > 0; x -= x & -x)
             i += tree[x];
         return i;
@@ -33,8 +34,8 @@ struct fenwick_multiset {
 
     // returns the number of elements in the set
     // which are exactly equal to x, O(1) amortized
-    int count(int x) const {
-        int y = x+1, i = tree[x+1];
+    T count(int x) const {
+        int y = x+1; T i = tree[x+1];
         for (y -= y & -y; x != y; x -= x & -x)
             i -= tree[x];
         return i;
@@ -42,7 +43,7 @@ struct fenwick_multiset {
 
     // returns the x'th element of the set,
     // 0-based indexing
-    int get(int x) const {
+    int get(T x) const {
         int i = 0;
         for (int m = 1<<(31-__builtin_clz(N)); m > 0; m >>= 1)
             if (i+m <= N && tree[i+m] <= x)
