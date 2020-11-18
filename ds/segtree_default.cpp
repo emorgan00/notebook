@@ -3,7 +3,7 @@ struct segtree {
 
     constexpr static T max_T = numeric_limits<T>::max();
     constexpr static T min_T = numeric_limits<T>::min();
-    constexpr static int N = 1<<int(ceil(log2(_N)));
+    constexpr static int H = int(ceil(log2(_N))), N = 1<<H;
 
     struct node { T s, l, r; } t[2*N];
     node merge(node x, node y) {
@@ -25,6 +25,7 @@ struct segtree {
     }
 
     void push(int i) {
+        if (!f[i] && !u[i]) return;
         if (f[i]) t[i] = {0, 0, 0};
         t[i].s += u[i]*(b[i]-a[i]+1), t[i].l += u[i], t[i].r += u[i];
         if (i < N) apply(2*i, u[i], f[i]), apply(2*i+1, u[i], f[i]);
@@ -33,17 +34,22 @@ struct segtree {
 
     void _upd(int l, int r, T x, bool ins, int i = 1) {
         if (l <= a[i] && r >= b[i]) apply(i, x, ins);
-        if (u[i] || f[i]) push(i);
+        push(i);
         if (l > b[i] || r < a[i] || l <= a[i] && r >= b[i]) return;
         _upd(l, r, x, ins, 2*i), _upd(l, r, x, ins, 2*i+1);
         t[i] = merge(t[2*i], t[2*i+1]);
     }
 
     node _qry(int l, int r, int i = 1) {
-        if (u[i] || f[i]) push(i);
+        push(i);
         if (l <= a[i] && r >= b[i]) return t[i];
         if (l > b[i] || r < a[i]) return {0, max_T, min_T};
         return merge(_qry(l, r, 2*i), _qry(l, r, 2*i+1));
+    }
+
+    T get(int i) {
+        for (int x = H; x >= 0; x--) push((N+i)>>x);
+        return t[N+i].s;
     }
 
     void set(int l, int r, T x) { _upd(l, r, x, 1); }
@@ -53,5 +59,4 @@ struct segtree {
     T sum(int l, int r) { return _qry(l, r).s; }
     T min(int l, int r) { return _qry(l, r).l; }
     T max(int l, int r) { return _qry(l, r).r; }
-    T get(int i) { return _qry(i, i).s; }
 };
