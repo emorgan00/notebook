@@ -13,7 +13,7 @@ struct rmq {
         tree[0] = data;
         for (int i = 1; i <= log2n; i++)
             for (int j = 0; j < n-(1<<i)+1; j++)
-                tree[i][j] = min(tree[i-1][j], tree[i-1][j+(1<<i-1)]);
+                tree[i][j] = min(tree[i-1][j], tree[i-1][j+(1<<(i-1))]);
     }
 
     // returns the minimum of the array on the interval [a..b] in O(1) time.
