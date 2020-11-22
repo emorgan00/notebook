@@ -1,11 +1,15 @@
 struct automaton {
 
     struct node {
-        int p, len;
+        int link; // suffix link
+        int len; // stores the length of the longest suffix for this state
         bool clo; // indicates whether a state was created by cloning.
         int fp; // stores the smallest element of endpos.
         map<int, int> adj; // transitions of form {char, destination}
     };
+
+    // state 0 = empty string
+    // state -1 = string which does not exist in the text
 
     int n = 1, l = 0;
     vector<node> a;
@@ -15,15 +19,15 @@ struct automaton {
     void append(int c) {
         a.push_back({0, a[l].len+1, 0, a[l].len, {}});
         int r = n++, x = l, y; l = r;
-        for (; x != -1 && !a[x].adj.count(c); x = a[x].p)
+        for (; x != -1 && !a[x].adj.count(c); x = a[x].link)
             a[x].adj[c] = r;
-        if (x == -1) a[r].p = 0;
+        if (x == -1) a[r].link = 0;
         else if (a[y = a[x].adj[c]].len == a[x].len+1)
-            a[r].p = y;
+            a[r].link = y;
         else {
-            a.push_back({a[y].p, a[x].len+1, 1, a[y].fp, a[y].adj});
-            a[r].p = a[y].p = n++;
-            for (; x != -1 && a[x].adj[c] == y; x = a[x].p)
+            a.push_back({a[y].link, a[x].len+1, 1, a[y].fp, a[y].adj});
+            a[r].link = a[y].link = n++;
+            for (; x != -1 && a[x].adj[c] == y; x = a[x].link)
                 a[x].adj[c] = n-1;
         }
     }
@@ -48,7 +52,7 @@ struct automaton {
     // this returns the state corresponding to s with its first char removed.
     // runs in O(1) time.
     int pop(int x, int len) {
-        return len == a[a[x].p].len+1 ? a[x].p : x;
+        return len == a[a[x].link].len+1 ? a[x].link : x;
     }
 
     // returns the state corresponding to the input,
@@ -86,7 +90,7 @@ struct automaton {
         auto o = order();
         for (int i = n-1; i > 0; i--) {
             if (!a[o[i]].clo) sz[o[i]]++;
-            sz[a[o[i]].p] += sz[o[i]];
+            sz[a[o[i]].link] += sz[o[i]];
         }
         sz[0] = 0;
     }
