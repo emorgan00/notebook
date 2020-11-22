@@ -60,8 +60,8 @@ struct mincostflow {
     }
 
     // compute the maximum flow from s to t, and the minimum cost needed to do it, one-time use.
-    // for cyclic graphs: SPFA + Edmonds-Karp, complexity is O(?????)
-    // for DAGS: Dijkstra's w/ Johnson potentials + Edmonds-Karp, complexity is O(?????)
+    // for cyclic graphs: SPFA + Edmonds-Karp, complexity is O(EV*min(V, flow))
+    // for DAGS: Dijkstra's w/ Johnson potentials + Edmonds-Karp, complexity is O(EV*min(V, flow))
     // negative weight cycles will always break it
     pair<T, T> solve(int _s, int _t) {
         s = _s, t = _t; T f = 0, c = 0;
