@@ -57,7 +57,7 @@ struct automaton {
 
     // returns the state corresponding to the input,
     // or -1 if the input is not present as a substring.
-    // runs in O(m), where m is the length of the input.
+    // runs in O(input).
     template<typename it>
     int find(it first, it last) {
         int x = 0;

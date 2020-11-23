@@ -6,7 +6,7 @@ struct ahocorasick {
         int link; // suffix link
         int exit; // exit link
         bool leaf; // indicates if one of the words in the dictionary ends here
-        unoredered_map<int, int> adj; // transitions of form {char, destination}
+        map<int, int> adj; // transitions of form {char, destination}
     };
 
     // state 0 = empty string
@@ -58,8 +58,7 @@ struct ahocorasick {
         return a[x].exit = a[x].leaf ? x : exit(link(x));
     }
 
-    // returns the state corresponding to the input.
-    // runs in O(m), where m is the length of the input.
+    // returns the state corresponding to the input string, runs in O(input).
     template<typename it>
     int find(it first, it last) {
         int x = 0;
@@ -70,10 +69,10 @@ struct ahocorasick {
 
     int find(string str) { return find(str.begin(), str.end()); }
 
-    // returns the string corresponding to state x, runs in O(ans)
+    // returns the string corresponding to state x, runs in O(output).
     string print(int x) {
         string str = "";
-        for (; x != 0; x = a[x].p) str += a[x].c;
+        while (x) str += a[x].c, x = a[x].p;
         reverse(str.begin(), str.end());
         return str;
     }
