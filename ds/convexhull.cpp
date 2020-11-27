@@ -43,4 +43,13 @@ struct convexhull {
             while (cw(*a, *b, *c) >= 0) hull.erase(b), b = c, dec(c);
         }
     }
+
+    // returns a list of the vertices of the hull
+    vector<pair<T, T>> list() {
+        if (hull.empty()) return tmp;
+        vector<pair<T, T>> out;
+        for (auto& p : hull)
+            out.push_back({p[1], p[2]});
+        return out;
+    }
 };
