@@ -12,16 +12,17 @@ struct lineset {
 
     multiset<line, less<>> hull;
     using it = decltype(hull.end());
-    const static T max_T = numeric_limits<T>::max();
-    const static T min_T = numeric_limits<T>::min();
+    constexpr static T max_T = numeric_limits<T>::max();
+    constexpr static T min_T = numeric_limits<T>::min();
 
     static T div(T x, T y) {
-        return x/y - (is_integral<T>::value ? ((x^y) < 0 && x%y) : 0);
+        if constexpr (!is_integral<T>::value) return x/y;
+        else return x/y - ((x^y) < 0 && x%y);
     }
 
     bool isect(it x, it y) {
         if (y == hull.end())
-            return (x->p = max_T, 0);
+            return x->p = max_T, 0;
         if (x->m == y->m)
             x->p = x->b > y->b ? max_T : min_T;
         else
