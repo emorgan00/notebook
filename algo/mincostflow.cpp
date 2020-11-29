@@ -2,9 +2,8 @@
 template<int N, typename T>
 struct mincostflow {
 
-    const T inf_T = numeric_limits<T>::max();
+    const T inf_T = numeric_limits<T>::max(), eps = 0; // set epsilon for non-integral types
     const bool CYCLIC = true; // false will usually make it run faster, but requires a DAG
-    // when working with floating point types, all comparisons below should be given a tolerance of epsilon
 
     struct flow_edge { int v, u; T f, w, c; };
     vector<flow_edge> adj[N];
@@ -35,7 +34,7 @@ struct mincostflow {
             if (vis[v]) continue; vis[v] = 1;
             for (auto& e : adj[v]) {
                 T d = e.c+pot[v]-pot[e.v];
-                if (l[v] != inf_T && e.f < e.w && c+d < l[e.v])
+                if (l[v] != inf_T && e.f < e.w-eps && c+d < l[e.v]-eps)
                     p[e.v] = e.u, pq.push({l[e.v] = c+d, e.v});
             }
         }
@@ -51,7 +50,7 @@ struct mincostflow {
             int v = q.front(); q.pop();
             vis[v] = 0;
             for (auto& e : adj[v])
-                if (l[v] != inf_T && e.f < e.w && l[v]+e.c < l[e.v]) {
+                if (l[v] != inf_T && e.f < e.w-eps && l[v]+e.c < l[e.v]-eps) {
                     l[e.v] = l[v]+e.c, p[e.v] = e.u;
                     if (!vis[e.v]) q.push(e.v), vis[e.v] = 1;
                 }
