@@ -41,7 +41,7 @@ struct modint {
 
     // O(logk) modular exponentiation
     modint pow(const ll k) const {
-        if (k < 1) return k == 0 ? 1 : modint(inv(this->v)).pow(-k);
+        if (k < 1) return k == 0 ? modint(1) : modint(inv(this->v)).pow(-k);
         return k&1 ? *this*(this->pow(k-1)) : (*this**this).pow(k>>1);
     }
 };

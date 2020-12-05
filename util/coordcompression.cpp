@@ -9,7 +9,7 @@ void compress(it1 first, it1 last, it2 result, cmp ord = less<>()) {
     for (it1 i = first; i != last; i++)
         m[*i].push_back(result+(i-first));
     int t = 0;
-    for (auto& [x, v] : m) {
+    for (auto& [_, v] : m) {
         for (auto& i : v) *i = t;
         t++;
     }

@@ -8,10 +8,10 @@ struct rmq {
     // runs in O(nlogn).
     rmq(vector<T>& data) {
         int n = data.size();
-        int log2n = n == 0 ? 0 : ceil(log2(n));
-        tree.assign(log2n+1, vector<T>(n));
+        int h = n == 0 ? 0 : ceil(log2(n));
+        tree.assign(h+1, vector<T>(n));
         tree[0] = data;
-        for (int i = 1; i <= log2n; i++)
+        for (int i = 1; i <= h; i++)
             for (int j = 0; j < n-(1<<i)+1; j++)
                 tree[i][j] = min(tree[i-1][j], tree[i-1][j+(1<<(i-1))]);
     }

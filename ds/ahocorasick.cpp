@@ -5,7 +5,7 @@ struct ahocorasick {
         int c; // the character by which p transitions to this node
         int link; // suffix link
         int exit; // exit link
-        bool leaf; // indicates if one of the words in the dictionary ends here
+        int leaf; // indicates how many words in the dictionary end here
         map<int, int> adj; // transitions of form {char, destination}
     };
 
@@ -25,7 +25,7 @@ struct ahocorasick {
             if (!a[v].adj.count(*i))
                 a.push_back({v, *i, -1, -2, 0, {}}), a[v].adj[*i] = n++;
             v = a[v].adj[*i];
-        } a[v].leaf = 1;
+        } a[v].leaf++;
         return v;
     }
 
