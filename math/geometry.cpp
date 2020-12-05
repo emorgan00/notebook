@@ -8,14 +8,14 @@ struct point {
 
     point(T _x, T _y) : x(_x), y(_y) {}
     point() : point(0, 0) {}
-    template<typename U> point(point<U> o) : point(o.x, o.y) {}
+    template<typename U> point(point<U> a) : point(a.x, a.y) {}
     
     friend string to_string(const point a) { return "("+to_string(a.x)+", "+to_string(a.y)+")"; }
     friend istream& operator>>(istream& i, point& a) { return i >> a.x >> a.y; }
     friend ostream& operator<<(ostream& o, const point a) { return o << "(" << a.x << ", " << a.y << ")"; }
 
-    point& operator+=(const point o) { x += o.x, y += o.y; return *this; }
-    point& operator-=(const point o) { x -= o.x, y -= o.y; return *this; }
+    point& operator+=(const point a) { x += a.x, y += a.y; return *this; }
+    point& operator-=(const point a) { x -= a.x, y -= a.y; return *this; }
     template<typename U> point& operator*=(const U r) { x *= r, y *= r; return *this; }
     template<typename U> point& operator/=(const U r) { x /= r, y /= r; return *this; }
     template<typename U> friend point<c_t<T, U>> operator+(point a, point<U> b) { return {a.x+b.x, a.y+b.y}; }
@@ -24,6 +24,7 @@ struct point {
     template<typename U> friend point<c_t<T, U>> operator*(const U r, const point a) { return {a.x*r, a.y*r}; }
     template<typename U> friend point<c_t<T, U>> operator/(const point a, const U r) { return {a.x/r, a.y/r}; }
     template<size_t i> T get() { return i ? y : x; }
+    template<typename U> friend bool operator==(const point a, const point b) { return a.x == b.x && a.y == b.y; }
 };
 
 template<typename T> T sqdist(point<T> a) { return a.x*a.x + a.y*a.y; }
@@ -44,16 +45,39 @@ point<ld> intersection(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
     return s*d + (1-s)*c;
 }
 
-// returns true if AB and CD intersect
+// returns true if lines AB and CD intersect
 bool intersects(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
     ld s = cross(a-c, b-a)/ld(cross(d-c, b-a)), t = cross(c-a, d-c)/ld(cross(b-a, d-c));
     return t >= 0 && t <= 1 && s >= 0 && s <= 1;
 }
 
-// returns double the signed area of a non-self-intersecting polygon (positive if CW, negative if CCW)
+// returns the distance from A to *segment* BC
+ld dist(point<ld> a, point<ld> b, point<ld> c) {
+    return dist(min(ld(1), max(ld(0), dot(a-b, c-b)/sqdist(c-b)))*(c-b)+b-a);
+}
+
+// returns the distance from *segment* AB to *segment* CD
+ld dist(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
+    if (intersects(a, b, c, d)) return 0;
+    return min(min(dist(a, c, d), dist(b, c, d)), min(dist(c, a, b), dist(d, a, c)));
+}
+
+// returns double the signed area of a simple polygon (positive if CW, negative if CCW)
 template<typename T>
 T area(vector<point<T>> v) {
     T out = cross(v.back(), v[0]);
     for (int i = 0; i < v.size()-1; i++) out += cross(v[i], v[i+1]);
+    return out;
+}
+
+// returns whether A is contained within a simple polygon
+template<typename T>
+bool contains(vector<point<T>> v, point<T> a) {
+    bool out = 0;
+    for (int i = 0; i < v.size(); i++) {
+        auto b = v[i], c = v[(i+1)%v.size()];
+        if (b.y > c.y) swap(b, c);
+        if (b.y <= a.y && a.y < c.y && cross(b-a, c-a) > 0) out ^= 1;
+    }
     return out;
 }
