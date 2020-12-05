@@ -9,9 +9,6 @@ struct point {
     point(T _x, T _y) : x(_x), y(_y) {}
     point() : point(0, 0) {}
     template<typename U> point(point<U> o) : point(o.x, o.y) {}
-
-    T sqdist() { return x*x+y*y; }
-    ld dist() { return hypot(ld(x), ld(y)); }
     
     friend string to_string(const point a) { return "("+to_string(a.x)+", "+to_string(a.y)+")"; }
     friend istream& operator>>(istream& i, point& a) { return i >> a.x >> a.y; }
@@ -29,6 +26,8 @@ struct point {
     template<size_t i> T get() { return i ? y : x; }
 };
 
+template<typename T> T sqdist(point<T> a) { return a.x*a.x + a.y*a.y; }
+ld dist(point<ld> a) { return hypot(a.x, a.y); }
 template<typename T, typename U>
 c_t<T, U> dot(point<T> a, point<U> b) { return a.x*b.x + a.y*b.y; }
 template<typename T, typename U>
@@ -36,7 +35,7 @@ c_t<T, U> cross(point<T> a, point<U> b) { return a.x*b.y - a.y*b.x; }
 
 // returns the projection of A to line BC
 point<ld> proj(point<ld> a, point<ld> b, point<ld> c) {
-    return dot(a-b, c-b)/(c-b).sqdist()*(c-b)+b;
+    return dot(a-b, c-b)/sqdist(c-b)*(c-b)+b;
 }
 
 // returns the point of intersection of lines AB and CD
