@@ -18,17 +18,27 @@ struct point {
     point& operator-=(const point a) { x -= a.x, y -= a.y; return *this; }
     template<typename U> point& operator*=(const U r) { x *= r, y *= r; return *this; }
     template<typename U> point& operator/=(const U r) { x /= r, y /= r; return *this; }
+
     template<typename U> friend point<c_t<T, U>> operator+(point a, point<U> b) { return {a.x+b.x, a.y+b.y}; }
     template<typename U> friend point<c_t<T, U>> operator-(point a,  point<U> b) { return {a.x-b.x, a.y-b.y}; }
     template<typename U> friend point<c_t<T, U>> operator*(const point a, const U r) { return {a.x*r, a.y*r}; }
     template<typename U> friend point<c_t<T, U>> operator*(const U r, const point a) { return {a.x*r, a.y*r}; }
     template<typename U> friend point<c_t<T, U>> operator/(const point a, const U r) { return {a.x/r, a.y/r}; }
+    
     template<size_t i> T get() { return i ? y : x; }
+
     template<typename U> friend bool operator==(const point a, const point b) { return a.x == b.x && a.y == b.y; }
+    template<typename U> friend bool operator<(const point a, const point<U> b) { return a.x == b.x ? a.y < b.y : a.x < b.x; }
+    template<typename U> friend bool operator<=(const point a, const point<U> b) { return a.x == b.x ? a.y <= b.y : a.x < b.x; }
+    template<typename U> friend bool operator>(const point a, const point<U> b) { return b < a }
+    template<typename U> friend bool operator>=(const point a, const point<U> b) { return b <= a; }
 };
 
 template<typename T> T sqdist(point<T> a) { return a.x*a.x + a.y*a.y; }
+template<typename T, typename U>
+c_t<T, U> sqdist(point<T> a, point<U> b) { return sqdist(a-b); }
 ld dist(point<ld> a) { return hypot(a.x, a.y); }
+ld dist(point<ld> a, point<ld> b) { return dist(a-b); }
 template<typename T, typename U>
 c_t<T, U> dot(point<T> a, point<U> b) { return a.x*b.x + a.y*b.y; }
 template<typename T, typename U>
