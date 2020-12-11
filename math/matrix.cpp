@@ -2,9 +2,7 @@ template<typename T, int H, int W>
 struct matrix {
 
     T M[H][W];
-    matrix() { clear(); }
-    matrix(bool b) { b ? ident() : clear(); }
-
+    matrix(const T k = 0) { k ? ident(k) : clear(); }
     matrix(initializer_list<initializer_list<T>> v) : matrix() {
         for (int i = 0; i < v.size(); i++)
             copy(v.begin()[i].begin(), v.begin()[i].end(), M[i]);
@@ -14,8 +12,8 @@ struct matrix {
     const T* operator[](const int i) const { return M[i]; }
 
     void clear() { fill(&M[0][0], &M[0][0]+sizeof(M)/sizeof(T), 0); }
-    void ident() { assert(H == W), clear();
-        for (int i = 0; i < W; i++) M[i][i] = 1;
+    void ident(const T k = 1) { assert(H == W), clear();
+        for (int i = 0; i < W; i++) M[i][i] = k;
     }
 
     friend string to_string(const matrix<T, H, W>& a) {
@@ -36,9 +34,18 @@ struct matrix {
             M[i][j] *= r;
         return *this;
     }
-    matrix<T, H, W> operator*(const T& r) { return matrix(*this) *= r; }
+    matrix<T, H, W>& operator/=(const T& r) {
+        for (int i = 0; i < H; i++) for (int j = 0; j < W; j++)
+            M[i][j] /= r;
+        return *this;
+    }
+    matrix<T, H, W> operator*(const T& r) const { return matrix(*this) *= r; }
     friend matrix<T, H, W> operator*(const T& r, const matrix<T, H, W>& a) {
         return matrix(a) *= r;
+    }
+    matrix<T, H, W> operator/(const T& r) const { return matrix(*this) /= r; }
+    friend matrix<T, H, W> operator/(const T& r, const matrix<T, H, W>& a) {
+        return matrix(a) /= r;
     }
 
     matrix<T, H, W>& operator+=(const matrix<T, H, W>& a) {
