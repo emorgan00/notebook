@@ -2,7 +2,7 @@ template<typename T, int H, int W>
 struct matrix {
 
     T M[H][W];
-    matrix(const T k = 0) { k ? ident(k) : clear(); }
+    matrix(const T k = 0) { ident(k); }
     matrix(initializer_list<initializer_list<T>> v) : matrix() {
         for (int i = 0; i < v.size(); i++)
             copy(v.begin()[i].begin(), v.begin()[i].end(), M[i]);
@@ -12,11 +12,11 @@ struct matrix {
     const T* operator[](const int i) const { return M[i]; }
 
     void clear() { fill(&M[0][0], &M[0][0]+sizeof(M)/sizeof(T), 0); }
-    void ident(const T k = 1) { assert(H == W), clear();
-        for (int i = 0; i < W; i++) M[i][i] = k;
+    void ident(const T k = 1) {
+        clear(); for (int i = 0; i < min(H, W); i++) M[i][i] = k;
     }
 
-    friend string to_string(const matrix<T, H, W>& a) {
+    friend string to_string(const matrix& a) {
         string s = "";
         for (int i = 0; i < H; i++) {
             s += (i == 0 ? "[" : ", ");
@@ -29,26 +29,23 @@ struct matrix {
         return o << to_string(a);
     }
 
-    matrix<T, H, W>& operator*=(const T& r) {
+    matrix& operator*=(const T& r) {
         for (int i = 0; i < H; i++) for (int j = 0; j < W; j++)
             M[i][j] *= r;
         return *this;
     }
-    matrix<T, H, W>& operator/=(const T& r) {
+    matrix& operator/=(const T& r) {
         for (int i = 0; i < H; i++) for (int j = 0; j < W; j++)
             M[i][j] /= r;
         return *this;
     }
-    matrix<T, H, W> operator*(const T& r) const { return matrix(*this) *= r; }
-    friend matrix<T, H, W> operator*(const T& r, const matrix<T, H, W>& a) {
+    matrix operator*(const T& r) const { return matrix(*this) *= r; }
+    matrix operator/(const T& r) const { return matrix(*this) /= r; }
+    friend matrix operator*(const T& r, const matrix& a) {
         return matrix(a) *= r;
     }
-    matrix<T, H, W> operator/(const T& r) const { return matrix(*this) /= r; }
-    friend matrix<T, H, W> operator/(const T& r, const matrix<T, H, W>& a) {
-        return matrix(a) /= r;
-    }
 
-    matrix<T, H, W>& operator+=(const matrix<T, H, W>& a) {
+    matrix& operator+=(const matrix& a) {
         for (int i = 0; i < H; i++) for (int j = 0; j < W; j++)
             M[i][j] += a.M[i][j];
         return *this;
@@ -60,28 +57,33 @@ struct matrix {
         return r;
     }
 
-    matrix<T, H, W> operator+(const matrix<T, H, W>& b) { return matrix(*this) += b; }
-    matrix<T, H, W> operator-(const matrix<T, H, W>& b) { return matrix(*this) += -b; }
-    matrix<T, H, W> operator+() { return matrix(*this); }
-    matrix<T, H, W> operator-() { return matrix(*this) *= -1; }
+    matrix& operator*=(const matrix& b) { return *this = *this*b; }
+    matrix operator+(const matrix& b) { return matrix(*this) += b; }
+    matrix operator-(const matrix& b) { return matrix(*this) += -b; }
+    matrix operator+() { return matrix(*this); }
+    matrix operator-() { return matrix(*this) *= -1; }
 
-    matrix<T, W, H> transpose() const {
-        matrix<T, W, H> r(0);
+    matrix transpose() const {
+        matrix r(0);
         for (int i = 0; i < H; i++) for (int j = 0; j < W; j++)
             r.M[i][j] = M[j][i];
         return r;
     }
 
     // O(n^3logk) matrix exponentiation
-    matrix<T, H, W> pow(long long k) { assert(H == W);
-        if (k < 0) return this->inv().pow(-k);
-        if (k < 2) return k == 0 ? 1 : matrix(*this);
-        return k&1 ? *this*(this->pow(k-1)) : (*this**this).pow(k>>1);
+    matrix pow(long long k) {
+        matrix a(1), r(1);
+        for (int i = 1; i <= k; i <<= 1) {
+            if (i&k) a *= r;
+            r *= r;
+            debug(i);
+        }
+        return a;
     }
 
     // O(n^3) matrix determinant, uses operator/
-    T det() const { assert(H == W);
-        matrix<T, H, W> r(*this); T d = 1;
+    T det() const {
+        matrix r(*this); T d = 1;
         for (int i = 0; i < H; i++) {
             if (r.M[i][i] == 0) for (int j = i+1; j < H; j++) if (r.M[j][i] != 0)
                 { swap(r.M[i], r.M[j]); d = 0-d; break; }
@@ -92,8 +94,8 @@ struct matrix {
     }
     
     // O(n^3) matrix inversion, uses operator/, undefined behavior if det(*this) == 0
-    matrix<T, H, W> inv() const { assert(H == W);
-        matrix<T, H, W> b(1), r(*this);
+    matrix inv() const {
+        matrix b(1), r(*this);
         for (int i = 0; i < H; i++) {
             if (r.M[i][i] == 0) for (int j = i+1; j < H; j++) if (r.M[j][i] != 0)
                 { swap(b.M[i], b.M[j]), swap(r.M[i], r.M[j]); break; }
