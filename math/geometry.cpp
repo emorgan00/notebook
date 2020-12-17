@@ -72,7 +72,7 @@ point<ld> intersection(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
     return cross(a-c, b-a)/cross(d-c, b-a)*(d-c)+c;
 }
 
-// returns true if lines AB and CD intersect
+// returns true if segments AB and CD intersect
 bool intersects(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
     ld s = cross(a-c, b-a)/cross(d-c, b-a), t = cross(c-a, d-c)/cross(b-a, d-c);
     return t >= 0 && t <= 1 && s >= 0 && s <= 1;
@@ -87,6 +87,12 @@ ld dist(point<ld> a, point<ld> b, point<ld> c) {
 ld dist(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
     if (intersects(a, b, c, d)) return 0;
     return min(min(dist(a, c, d), dist(b, c, d)), min(dist(c, a, b), dist(d, a, c)));
+}
+
+// returns the circumcenter of triangle ABC
+point<ld> circumcenter(point<ld> a, point<ld> b, point<ld> c) {
+    point<ld> x = (a+b)/2, y = (a+c)/2;
+    return intersection(x, x+rot(b-a, PI/2), y, y+rot(c-a, PI/2));
 }
 
 // returns double the signed area of a simple polygon (positive if CCW, negative if CW)
