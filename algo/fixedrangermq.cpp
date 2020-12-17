@@ -1,5 +1,4 @@
-// Returns a vector V where V[i] = minimum of the array from i to i+width-1.
-// Runs in O(n) time.
+// result[i] = minimum of the array from i to i+width-1, runs in O(n) time.
 
 template<typename it1, typename it2>
 void fixedrangermq(it1 first, it1 last, it2 result, int width) {
