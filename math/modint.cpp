@@ -18,7 +18,7 @@ struct modint {
     friend string to_string(const modint n) { return to_string(n.v); }
     friend istream& operator>>(istream& i, modint& n) { return i >> n.v; }
     friend ostream& operator<<(ostream& o, const modint n) { return o << n.v; }
-    template<typename T> operator T() { return T(v); }
+    template<typename T> explicit operator T() { return T(v); }
 
     modint& operator+=(const modint n) { v += n.v; v -= (M&0-(v>=M)); return *this; }
     modint& operator-=(const modint n) { v -= n.v; v += (M&0-(v<0)); return *this; }

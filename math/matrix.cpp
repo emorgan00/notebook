@@ -76,7 +76,6 @@ struct matrix {
         for (int i = 1; i <= k; i <<= 1) {
             if (i&k) a *= r;
             r *= r;
-            debug(i);
         }
         return a;
     }
