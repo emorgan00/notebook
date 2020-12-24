@@ -72,7 +72,7 @@ struct matrix {
 
     // O(n^3logk) matrix exponentiation
     matrix pow(long long k) {
-        matrix a(1), r(1);
+        matrix a(1), r(*this);
         for (int i = 1; i <= k; i <<= 1) {
             if (i&k) a *= r;
             r *= r;
