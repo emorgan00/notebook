@@ -1,22 +1,3 @@
-// checks if a number is prime in O(log^3n) time, randint comes from random.cpp.
-bool isprime(ll n) {
-    if (n == 1 || n%2 == 0) return false;
-    ll d = n-1, r = 0;
-    while (d%2 == 0) r++, d >>= 1;
-    for (int k = 0; k < 30; k++) {
-        __int128_t x = 1, a = uniform_int_distribution<ll>(2, n-2)(randint);
-        for (int i = 1; i <= d; i <<= 1) {
-            if (d&i) x = (x*a)%n;
-            a = (a*a)%n;
-        }
-        bool f = x == 1 || x == n-1;
-        for (int i = 1; i < r; i++)
-            f = f || (x = (x*x)%n) == n-1;
-        if (!f) return false;
-    }
-    return true;
-}
-
 // returns a vector of length n, containing 1 if a number is prime, else 0.
 // runs in O(nloglogn) time.
 vector<bool> primesieve(int n) {
@@ -30,12 +11,35 @@ vector<bool> primesieve(int n) {
 
 // returns a sorted list of all primes less than or equal to n.
 // runs in O(nloglogn) time.
-vector<ll> primesupto(ll n) {
+vector<ll> primesupto(int n) {
     vector<bool> sieve = primesieve(n+1);
     vector<ll> out;
-    for (ll i = 2; i <= n; i++)
+    for (int i = 2; i <= n; i++)
         if (sieve[i]) out.push_back(i);
     return out;
+}
+
+// checks if a number is prime in O(log^3(n)) time, randint comes from random.cpp.
+// works for n <= 10^18
+bool isprime(ll n) {
+    static vector<bool> sieve = primesieve(1000000);
+    if (n < sieve.size()) return sieve[n];
+    if (n%2 == 0) return false;
+    ll d = n-1, r = 0;
+    while (d%2 == 0) r++, d >>= 1;
+    for (int k = 0; k < 30; k++) {
+        __int128_t x = 1, a = uniform_int_distribution<ll>(2, n-2)(randint);
+        for (ll i = 1; i <= d; i <<= 1) {
+            if (d&i) x = (x*a)%n;
+            a = (a*a)%n;
+        }
+        bool f = 0;
+        if (x == 1 || x == n-1) f = 1;
+        for (int i = 1; i < r; i++)
+            f = f || (x = (x*x)%n) == n-1;
+        if (!f) return false;
+    }
+    return true;
 }
 
 // returns a sorted list of all prime factors of n in O(min(n^(1/2), n^(1/4)+log^3(n)+10^5)) time.
@@ -64,6 +68,25 @@ vector<ll> primefactors(ll n) {
             }
     }
     return out;
+}
+
+// if n is a prime power, returns that prime, otherwise returns 0, runs in O(log^3(n)) time.
+// works for n <= 10^18
+ll primepower(ll n) {
+    for (ll k = 1; k < 63; k++) {
+        __int128_t p = 1;
+        for (ll i = 1ll<<32; i > 0; i /= 2) {
+            __int128_t x = 1;
+            bool f = 0;
+            for (int j = 0; j < k; j++)
+                if (f = f || (x *= (p+i)) > n) break;
+            if (!f && x <= n) {
+                p += i;
+                if (x == n && isprime(p)) return p;
+            }
+        }
+    }
+    return 0;
 }
 
 // returns a sorted list of all divisors of n in O(sqrt(n)) time.
