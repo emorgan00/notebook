@@ -1,21 +1,21 @@
-template<int _N, typename T>
+template<int N, typename T = int>
 struct segtree {
 
     constexpr static T max_T = numeric_limits<T>::max();
     constexpr static T min_T = numeric_limits<T>::min();
-    constexpr static int H = int(ceil(log2(_N))), N = 1<<H;
+    constexpr static int H = int(ceil(log2(N))), _N = 1<<H;
 
-    struct node { T s, l, r; } t[2*N];
+    struct node { T s, l, r; } t[2*_N];
     node merge(node x, node y) {
         return {x.s+y.s, std::min(x.l, y.l), std::max(x.r, y.r)};
     }
 
-    T u[2*N]; bool f[2*N]; int a[2*N], b[2*N];
+    T u[2*_N]; bool f[2*_N]; int a[2*_N], b[2*_N];
     segtree() {
-        fill(t, t+2*N, node({0, 0, 0}));
-        fill(f, f+2*N, 0), fill(u, u+2*N, 0);
-        iota(a+N, a+2*N, 0), iota(b+N, b+2*N, 0);
-        for (int i = N-1; i > 0; i--)
+        fill(t, t+2*_N, node({0, 0, 0}));
+        fill(f, f+2*_N, 0), fill(u, u+2*_N, 0);
+        iota(a+_N, a+2*_N, 0), iota(b+_N, b+2*_N, 0);
+        for (int i = _N-1; i > 0; i--)
             a[i] = a[2*i], b[i] = b[2*i+1];
     }
 
@@ -28,7 +28,7 @@ struct segtree {
         if (!f[i] && !u[i]) return;
         if (f[i]) t[i] = {0, 0, 0};
         t[i].s += u[i]*(b[i]-a[i]+1), t[i].l += u[i], t[i].r += u[i];
-        if (i < N) apply(2*i, u[i], f[i]), apply(2*i+1, u[i], f[i]);
+        if (i < _N) apply(2*i, u[i], f[i]), apply(2*i+1, u[i], f[i]);
         u[i] = f[i] = 0;
     }
 
@@ -48,8 +48,8 @@ struct segtree {
     }
 
     T get(int i) {
-        for (int x = H; x >= 0; x--) push((N+i)>>x);
-        return t[N+i].s;
+        for (int x = H; x >= 0; x--) push((_N+i)>>x);
+        return t[_N+i].s;
     }
 
     void set(int l, int r, T x) { _upd(l, r, x, 1); }

@@ -20,6 +20,13 @@ struct modint {
     friend ostream& operator<<(ostream& o, const modint n) { return o << n.v; }
     template<typename T> explicit operator T() { return T(v); }
 
+    friend bool operator==(const modint n, const modint m) { return n.v == m.v; }
+    friend bool operator!=(const modint n, const modint m) { return n.v != m.v; }
+    friend bool operator<(const modint n, const modint m) { return n.v < m.v; }
+    friend bool operator<=(const modint n, const modint m) { return n.v <= m.v; }
+    friend bool operator>(const modint n, const modint m) { return n.v > m.v; }
+    friend bool operator>=(const modint n, const modint m) { return n.v >= m.v; }
+
     modint& operator+=(const modint n) { v += n.v; v -= (M&0-(v>=M)); return *this; }
     modint& operator-=(const modint n) { v -= n.v; v += (M&0-(v<0)); return *this; }
     modint& operator*=(const modint n) { v = reduce(v*n.v); return *this; }
@@ -28,16 +35,12 @@ struct modint {
     friend modint operator-(const modint n, const modint m) { return modint(n) -= m; }
     friend modint operator*(const modint n, const modint m) { return modint(n) *= m; }
     friend modint operator/(const modint n, const modint m) { return modint(n) /= m; }
-    friend bool operator==(const modint n, const modint m) { return n.v == m.v; }
-    friend bool operator!=(const modint n, const modint m) { return n.v != m.v; }
-    friend bool operator<(const modint n, const modint m) { return n.v < m.v; }
-    friend bool operator<=(const modint n, const modint m) { return n.v <= m.v; }
-    friend bool operator>(const modint n, const modint m) { return n.v > m.v; }
-    friend bool operator>=(const modint n, const modint m) { return n.v >= m.v; }
     modint& operator++() { return *this += 1; }
     modint& operator--() { return *this -= 1; }
     modint operator++(int) { modint t = *this; return *this += 1, t; }
     modint operator--(int) { modint t = *this; return *this -= 1, t; }
+    modint operator+() { return *this; }
+    modint operator-() { return modint(0) -= *this; }
 
     // O(logk) modular exponentiation
     modint pow(const ll k) const {

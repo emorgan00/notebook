@@ -51,6 +51,11 @@ struct ancestor {
     int step(int i, int j) const {
         return is_ancestor(i, j) ? ktha(j, d[j]-d[i]-1) : p[i][0];
     }
+
+    // returns the number of edges between i and j in O(logn) time.
+    int dist(int i, int j) {
+        return d[i]+d[j]-2*d[lca(i, j)];
+    }
 };
 
 // note, the file lca_old.cpp allows lca queries in O(1) time instead of O(logn) time,

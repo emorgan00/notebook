@@ -1,4 +1,5 @@
 typedef long double ld;
+const ld PI = acos(-1);
 
 template<typename T>
 struct point {
@@ -15,10 +16,12 @@ struct point {
     friend istream& operator>>(istream& i, point& a) { return i >> a.x >> a.y; }
     friend ostream& operator<<(ostream& o, const point a) { return o << "(" << a.x << ", " << a.y << ")"; }
 
-    point& operator+=(const point a) { x += a.x, y += a.y; return *this; }
-    point& operator-=(const point a) { x -= a.x, y -= a.y; return *this; }
     template<typename U> point& operator*=(const U r) { x *= r, y *= r; return *this; }
     template<typename U> point& operator/=(const U r) { x /= r, y /= r; return *this; }
+    point& operator+=(const point a) { x += a.x, y += a.y; return *this; }
+    point& operator-=(const point a) { x -= a.x, y -= a.y; return *this; }
+    point operator+() { return *this; }
+    point operator-() { return *this *= -1; }
 
     template<typename U> friend point<c_t<U>> operator+(point a, point<U> b) { return {a.x+b.x, a.y+b.y}; }
     template<typename U> friend point<c_t<U>> operator-(point a,  point<U> b) { return {a.x-b.x, a.y-b.y}; }
@@ -28,7 +31,8 @@ struct point {
     
     template<size_t i> T get() { return i ? y : x; }
 
-    template<typename U> friend bool operator==(const point a, const point b) { return a.x == b.x && a.y == b.y; }
+    template<typename U> friend bool operator==(const point a, const point<U> b) { return a.x == b.x && a.y == b.y; }
+    template<typename U> friend bool operator!=(const point a, const point<U> b) { return a.x != b.x || a.y != b.y; }
     template<typename U> friend bool operator<(const point a, const point<U> b) { return a.x == b.x ? a.y < b.y : a.x < b.x; }
     template<typename U> friend bool operator<=(const point a, const point<U> b) { return a.x == b.x ? a.y <= b.y : a.x < b.x; }
     template<typename U> friend bool operator>(const point a, const point<U> b) { return b < a; }

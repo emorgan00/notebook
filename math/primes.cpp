@@ -1,67 +1,67 @@
-// checks if a number is prime in O(sqrt(n)) time.
-template<typename T>
-bool isprime(T n) {
-    if (n == 1) return false;
-    for (T i = 2; i <= (T)(sqrt(n)); i++)
-        if (n%i == 0)
-            return false;
+// checks if a number is prime in O(log^3n) time, randint comes from random.cpp.
+bool isprime(ll n) {
+    if (n == 1 || n%2 == 0) return false;
+    ll d = n-1, r = 0;
+    while (d%2 == 0) r++, d >>= 1;
+    for (int k = 0; k < 30; k++) {
+        __int128_t x = 1, a = uniform_int_distribution<ll>(2, n-2)(randint);
+        for (int i = 1; i <= d; i <<= 1) {
+            if (d&i) x = (x*a)%n;
+            a = (a*a)%n;
+        }
+        bool f = x == 1 || x == n-1;
+        for (int i = 1; i < r; i++)
+            f = f || (x = (x*x)%n) == n-1;
+        if (!f) return false;
+    }
     return true;
 }
 
 // returns a vector of length n, containing 1 if a number is prime, else 0.
 // runs in O(nloglogn) time.
-template<typename T>
-vector<bool> primesieve(T n) {
+vector<bool> primesieve(int n) {
     vector<bool> sieve(n, 1);
-    for (T i = 2; i < n; i++)
+    for (int i = 2; i < n; i++)
         if (sieve[i])
-            for (T j = 2*i; j < n; j += i)
+            for (int j = 2*i; j < n; j += i)
                 sieve[j] = 0;
     return sieve;
 }
 
 // returns a sorted list of all primes less than or equal to n.
 // runs in O(nloglogn) time.
-template<typename T>
-vector<T> primesupto(T n) {
-    vector<bool> sieve(n+1, 1);
-    for (T i = 2; i <= n; i++)
-        if (sieve[i])
-            for (T j = 2*i; j <= n; j += i)
-                sieve[j] = 0;
-    vector<T> out;
-    for (T i = 2; i <= n; i++)
-        if (sieve[i])
-            out.push_back(i);
+vector<ll> primesupto(ll n) {
+    vector<bool> sieve = primesieve(n+1);
+    vector<ll> out;
+    for (ll i = 2; i <= n; i++)
+        if (sieve[i]) out.push_back(i);
     return out;
 }
 
-// returns a sorted list of all prime factors of n in O(sqrt(n)) time.
-template<typename T>
-vector<T> primefactors(T n) {
-    vector<T> out;
-    for (T i = 2; i <= n; i++) {
-        if (i >= (T)(sqrt(n))+1)
-            i = n;
-        if (n%i == 0) {
-            out.push_back(i);
-            n /= i; i--;
-        }
+// returns a sorted list of all prime factors of n in O(min(n^(1/2), n^(1/4)+log^3(n)+10^5)) time.
+// works for n <= 10^18
+vector<ll> primefactors(ll n) {
+    static vector<ll> small = primesupto(1000000);
+    if (isprime(n)) return {n};
+    vector<ll> out;
+    for (ll p : small) {
+        if (p*p > n) break;
+        while (n%p == 0)
+            n /= p, out.push_back(p);
     }
-    return out;
-}
-
-// returns a sorted list of all unique prime factors of n in O(sqrt(n)) time.
-template<typename T>
-vector<T> uniqueprimefactors(T n) {
-    vector<T> out;
-    for (T i = 2; i <= n; i++) {
-        if (i >= (T)(sqrt(n))+1)
-            i = n;
-        if (n%i == 0) {
-            out.push_back(i);
-            while (n%i == 0) n /= i;
-        }
+    if (n == 1 || isprime(n)) {
+        out.push_back(n);
+        return out;
+    }
+    __int128_t x = 2, y = 2;
+    ll f = 0;
+    for (ll z = 1; 1; z <<= 1) {
+        y = x;
+        for (ll i = 0; i < z; i++)
+            if ((f = gcd(ll((x = (x*x+1)%n)-y), n)) > 1) {
+                out.push_back(min(f, n/f)), out.push_back(max(f, n/f));
+                return out;
+            }
     }
     return out;
 }
@@ -83,16 +83,20 @@ vector<T> divisors(T n) {
 // computes Euler's totient function of n in O(sqrt(n)) time.
 template<typename T>
 T totient(T n) {
-    T out = 1;
+    T out = 1, s = sqrt(n);
     for (T i = 2; i <= n; i++) {
-        if (i >= (T)(sqrt(n))+1)
-            i = n;
+        if (i > s) i = n;
         if (n%i == 0) {
-            n /= i; out *= i-1;
-            while (n%i == 0) {
-                n /= i; out *= i;
-            }
+            n /= i, out *= i-1;
+            while (n%i == 0)
+                n /= i, out *= i;
         }
     }
     return out;
+}
+
+// computes mobius(i) for i from 0 to n in O() time
+template<typename T>
+vector<T> mobiussieve(T n) {
+    
 }
