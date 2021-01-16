@@ -11,9 +11,11 @@ struct dsu {
         return x;
     }
 
-    void unite(int a, int b) {
+    // returns true if a and b are in the same set, and then unites them.
+    bool unite(int a, int b) {
         a = rep(a), b = rep(b);
         if (a != b) p[b] = a, sz[a] += sz[b];
+        return a == b;
     }
 
     // returns true if a and b are in the same set.
