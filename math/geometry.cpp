@@ -21,7 +21,7 @@ struct point {
     point& operator+=(const point a) { x += a.x, y += a.y; return *this; }
     point& operator-=(const point a) { x -= a.x, y -= a.y; return *this; }
     point operator+() { return *this; }
-    point operator-() { return *this *= -1; }
+    point operator-() { return *this * -1; }
 
     template<typename U> friend point<c_t<U>> operator+(point a, point<U> b) { return {a.x+b.x, a.y+b.y}; }
     template<typename U> friend point<c_t<U>> operator-(point a,  point<U> b) { return {a.x-b.x, a.y-b.y}; }
@@ -45,7 +45,7 @@ template<typename T, typename U>
 auto sqdist(point<T> a, point<U> b) { return sqdist(a-b); }
 ld dist(point<ld> a) { return hypot(a.x, a.y); }
 ld dist(point<ld> a, point<ld> b) { return dist(a-b); }
-ld atan2(point<ld> a) { return atan2(a.x, a.y); }
+ld atan2(point<ld> a) { return atan2(a.y, a.x); }
 
 template<typename T, typename U>
 auto dot(point<T> a, point<U> b) { return a.x*b.x + a.y*b.y; }

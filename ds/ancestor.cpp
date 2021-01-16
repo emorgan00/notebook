@@ -3,7 +3,7 @@
 struct ancestor {
 
     vector<int> vin, vout, d;
-    vector<vector<int>> &adj, p;
+    vector<vector<int>> adj, p;
     int n, t = 0, e;
 
     void dfs(int i, int v) {
@@ -18,7 +18,7 @@ struct ancestor {
 
     // accepts an adjecency list. can include or exlude parents, it works either way.
     // constructor runs in O(nlogn) time.
-    ancestor(vector<vector<int>>& _adj, int root) : adj(_adj), n(_adj.size()) {
+    ancestor(vector<vector<int>> _adj, int root) : adj(_adj), n(_adj.size()) {
         vin.resize(n), vout.resize(n), d.assign(n, 0);
         e = ceil(log2(n));
         p.assign(n, vector<int>(e+1));
