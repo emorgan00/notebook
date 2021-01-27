@@ -26,6 +26,7 @@ struct hld_single {
     }
 
     hld_single(vector<vector<int>> _adj = {}, int root = 0) : adj(_adj), n(_adj.size()) {
+        if (_adj.size() == 0) return;
         vin.resize(n), vout.resize(n), head.resize(n);
         p.assign(n, -1), d.assign(n, 0), sz.assign(n, 1), hvy.assign(n, 0);
         _assign(root, -1), _dfs(root);

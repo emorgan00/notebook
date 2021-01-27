@@ -6,7 +6,7 @@ struct rmq {
     vector<vector<T>> tree;
 
     // runs in O(nlogn).
-    rmq(vector<T>& data) {
+    rmq(vector<T> data = {}) {
         int n = data.size();
         int h = n == 0 ? 0 : ceil(log2(n));
         tree.assign(h+1, vector<T>(n));

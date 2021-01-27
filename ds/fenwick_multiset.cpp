@@ -1,6 +1,7 @@
 // ordered statistic tree using fenwick tree.
 // all operations take O(log(N)),
-// where N is the limit on size of elements
+// where N is the limit on size of elements.
+// see https://codeforces.com/blog/entry/61364
 
 template<int N, typename T = int>
 struct fenwick_multiset {
@@ -51,5 +52,3 @@ struct fenwick_multiset {
         return i;
     }
 };
-
-// see https://codeforces.com/blog/entry/61364
