@@ -8,7 +8,7 @@ vector<int> toposort(vector<vector<int>> adj) {
     for (int i = 0; i < adj.size(); i++)
         if (!in[i]) stk.push_back(i);
     while (!stk.empty()) {
-        out.pb(stk.back()); stk.pop_back();
+        out.push_back(stk.back()); stk.pop_back();
         for (int j : adj[out.back()])
             if (!--in[j]) stk.push_back(j);
     }
