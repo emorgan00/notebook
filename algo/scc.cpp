@@ -41,7 +41,7 @@ struct scc {
         for (int i = 0; i < adj.size(); i++)
             for (int j : r_adj[i])
                 if (c_adj[c[j]].empty() || i != c_adj[c[j]].back())
-                    if (c[i] != c[j]) c_adj[j].push_back(i);
+                    if (c[i] != c[j]) c_adj[c[j]].push_back(c[i]);
         return c_adj;
     }
 };
