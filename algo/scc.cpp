@@ -33,8 +33,8 @@ struct scc {
         return c;
     }
 
-    // returns an adjacency list over the scc's where an edge u->v means there is a
-    // path i->j in the original graph if c[i] = u && c[j] = v, runs in O(E).
+    // returns an adjacency list over the scc's where an edge u->v means there is
+    // some edge i->j in the original graph s.t. c[i] = u && c[j] = v, runs in O(E).
     vector<vector<int>> dag() {
         if (c.empty()) components();
         c_adj.resize(*max_element(c.begin(), c.end())+1);
