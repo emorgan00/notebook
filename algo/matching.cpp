@@ -1,7 +1,7 @@
 // computes maximum matching in a bipartite graph
 // N vertices on the left, and M vertices on the right
 template<int N, int M>
-struct matcher {
+struct matching {
 
     vector<int> adj[N];
     int ord[N], vis[N], R[N], t;

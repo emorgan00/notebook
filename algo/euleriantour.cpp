@@ -9,6 +9,11 @@ struct tour {
     // n vertices
     tour(int n) : adj(n), in(n, 0) {}
 
+    tour(vector<vector<int>> _adj) : tour(_adj.size()) {
+        for (int i = 0; i < _adj.size(); i++)
+            for (int j : adj[i]) edge(i, j);
+    }
+
     void clear(int n) {
         adj.assign(n, {}); in.assign(n, 0);
         bad.clear(); circ.clear();
@@ -60,6 +65,11 @@ struct tour {
 
     // n vertices
     tour(int n) : adj(n) {}
+
+    tour(vector<vector<int>> _adj) : tour(_adj.size()) {
+        for (int i = 0; i < _adj.size(); i++)
+            for (int j : adj[i]) if (i < j) edge(i, j);
+    }
 
     void clear(int n) {
         adj.assign(n, {});

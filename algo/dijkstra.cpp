@@ -1,7 +1,7 @@
 // Accepts an adjacency list. Returns the minimum cost from s to e.
 // Pairs should be in the form {weight, destination}, runs in O(ElogV).
 template<typename T>
-T dijkstra(vector<vector<pair<T, int>>>& adj, int s, int e) {
+T dijkstra(vector<vector<pair<T, int>>> adj, int s, int e) {
 
     const static T inf_T = numeric_limits<T>::max();
     int n = adj.size();
@@ -24,7 +24,7 @@ T dijkstra(vector<vector<pair<T, int>>>& adj, int s, int e) {
 // Accepts an adjacency list. Returns the minimum cost from s to all vertices.
 // Pairs should be in the form {weight, destination}, runs in O(ElogV).
 template<typename T>
-vector<T> dijkstra(vector<vector<pair<T, int>>>& adj, int s) {
+vector<T> dijkstra(vector<vector<pair<T, int>>> adj, int s) {
 
     const static T inf_T = numeric_limits<T>::max();
     int n = adj.size();
