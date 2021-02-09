@@ -18,6 +18,8 @@ struct scc {
             if (!v[j]) partition(j, t);
     }
 
+    // returns a component vector c s.t. c[i] == c[j] iff i and j
+    // are in the same strongly connected component, runs in O(E).
     vector<int> components() {
         int n = adj.size(), t = 0;
         v.assign(n, 0), r_adj.resize(n);
@@ -31,6 +33,8 @@ struct scc {
         return c;
     }
 
+    // returns an adjacency list over the scc's where an edge u->v means there is a
+    // path i->j in the original graph if c[i] = u && c[j] = v, runs in O(E).
     vector<vector<int>> dag() {
         if (c.empty()) components();
         c_adj.resize(*max_element(c.begin(), c.end())+1);
