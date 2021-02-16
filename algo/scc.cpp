@@ -9,7 +9,7 @@ struct scc {
         v[i] = 1;
         for (int j : adj[i])
             if (!v[j]) dfs(j);
-        ord.pb(i);
+        ord.push_back(i);
     }
 
     void partition(int i, int t) {
