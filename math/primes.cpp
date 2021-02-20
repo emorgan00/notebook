@@ -118,8 +118,15 @@ T totient(T n) {
     return out;
 }
 
-// computes mobius(i) for i from 0 to n in O() time
-template<typename T>
-vector<T> mobiussieve(T n) {
-    
+// computes mobius(i) for i from 0 to n in O(nlogn) time
+vector<int> mobiussieve(int n) {
+    vector<int> m(n+1, -1), p(n+1, 1);
+    m[0] = 0, m[1] = 1;
+    for (int i = 2; i <= n; i++)
+        if (p[i]) for (int j = 2; j*i <= n; j++) {
+            if (j%i) m[i*j] = m[i]*m[j];
+            else m[i*j] = 0;
+            p[i*j] = 0;
+        }
+    return m;
 }

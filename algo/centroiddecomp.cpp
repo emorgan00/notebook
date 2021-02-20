@@ -6,6 +6,8 @@ struct centroid {
     vector<int> sz;
 
     centroid(int n) : adj(n), vis(n, 0), sz(n) {}
+    centroid(vector<vector<int>> _adj) :
+        adj(_adj), vis(_adj.size(), 0), sz(_adj.size()) {}
 
     // add an edge between i and j
     void edge(int i, int j) {
