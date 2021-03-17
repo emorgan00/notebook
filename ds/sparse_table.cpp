@@ -4,7 +4,6 @@ struct sparse_table {
     using T = typename remove_reference<decltype(*declval<it>())>::type;
     vector<vector<T>> t; cmp f;
 
-    sparse_table() {}
     sparse_table(it first, it last, cmp op) : t(1), f(op) {
         int n = distance(first, last);
         t.assign(32-__builtin_clz(n), vector<T>(n));

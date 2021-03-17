@@ -19,6 +19,7 @@ struct ancestor {
     // accepts an adjecency list. can include or exlude parents, it works either way.
     // constructor runs in O(nlogn) time.
     ancestor(vector<vector<int>> _adj = {}, int root = 0) : adj(_adj), n(_adj.size()) {
+        if (adj.empty()) return;
         vin.resize(n), vout.resize(n), d.assign(n, 0);
         e = ceil(log2(n));
         p.assign(n, vector<int>(e+1));

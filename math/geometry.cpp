@@ -77,9 +77,16 @@ point<ld> intersection(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
 }
 
 // returns true if segments AB and CD intersect
-bool intersects(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
-    ld s = cross(a-c, b-a)/cross(d-c, b-a), t = cross(c-a, d-c)/cross(b-a, d-c);
-    return t >= 0 && t <= 1 && s >= 0 && s <= 1;
+template<typename T, bool endpoints_ok = true>
+bool intersects(point<T> a, point<T> b, point<T> c, point<T> d) {
+    auto s_n = cross(a-c, b-a), s_d = cross(d-c, b-a);
+    auto t_n = cross(c-a, d-c), t_d = cross(b-a, d-c);
+    if constexpr (endpoints_ok)
+        return (s_n <= 0 && s_d < 0 || s_n >= 0 && s_d > 0) && abs(s_n) <= abs(s_d) 
+            && (t_n <= 0 && t_d < 0 || t_n >= 0 && t_d > 0) && abs(t_n) <= abs(t_d);
+    else
+        return (s_n < 0 && s_d < 0 || s_n > 0 && s_d > 0) && abs(s_n) < abs(s_d) 
+            && (t_n < 0 && t_d < 0 || t_n > 0 && t_d > 0) && abs(t_n) < abs(t_d);
 }
 
 // returns the distance from A to *segment* BC

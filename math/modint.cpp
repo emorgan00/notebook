@@ -1,19 +1,19 @@
 template<ll M>
 struct modint {
 
-    static ll reduce(ll n) {
+    static ll _reduce(ll n) {
         constexpr static ll b = -1ull/M;
         ll r = n-(ll)(__uint128_t(b)*n>>64)*M; return r >= M ? r-M : r;
     }
 
-    static ll inv(ll n) {
+    static ll _pow(ll n, ll k) {
         ll r = 1;
-        for (ll k = M-2; k > 0; k >>= 1, n = reduce(n*n))
-            if (k&1) r = reduce(r*n);
+        for (; k > 0; k >>= 1, n = _reduce(n*n))
+            if (k&1) r = _reduce(r*n);
         return r;
     }
 
-    ll v; modint(ll n = 0) : v(reduce(n)) { v += (M&0-(v<0)); }
+    ll v; modint(ll n = 0) : v(_reduce(n)) { v += (M&0-(v<0)); }
     
     friend string to_string(const modint n) { return to_string(n.v); }
     friend istream& operator>>(istream& i, modint& n) { return i >> n.v; }
@@ -29,8 +29,8 @@ struct modint {
 
     modint& operator+=(const modint n) { v += n.v; v -= (M&0-(v>=M)); return *this; }
     modint& operator-=(const modint n) { v -= n.v; v += (M&0-(v<0)); return *this; }
-    modint& operator*=(const modint n) { v = reduce(v*n.v); return *this; }
-    modint& operator/=(const modint n) { v = reduce(v*inv(n.v)); return *this; }
+    modint& operator*=(const modint n) { v = _reduce(v*n.v); return *this; }
+    modint& operator/=(const modint n) { v = _reduce(v*_pow(n.v, M-2)); return *this; }
     friend modint operator+(const modint n, const modint m) { return modint(n) += m; }
     friend modint operator-(const modint n, const modint m) { return modint(n) -= m; }
     friend modint operator*(const modint n, const modint m) { return modint(n) *= m; }
@@ -43,8 +43,6 @@ struct modint {
     modint operator-() { return modint(0) -= *this; }
 
     // O(logk) modular exponentiation
-    modint pow(const ll k) const {
-        if (k < 1) return k == 0 ? modint(1) : modint(inv(this->v)).pow(-k);
-        return k&1 ? *this*(this->pow(k-1)) : (*this**this).pow(k>>1);
-    }
+    modint pow(const ll k) const { return _pow(v, k); }
+    modint inv() const { return _pow(v, M-2); }
 };
