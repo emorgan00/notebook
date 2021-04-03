@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// these to_string headers are taken from tourist on codeforces
-
 template <typename A, typename B>
 string to_string(pair<A, B> p);
  
@@ -26,6 +24,11 @@ string to_string(char c) {
  
 string to_string(bool b) {
     return (b ? "true" : "false");
+}
+
+template<typename A>
+string to_string(complex<A> v) {
+    return to_string(v.real()) + " + " + to_string(v.imag()) + "i";
 }
  
 string to_string(vector<bool> v) {
@@ -55,11 +58,6 @@ string to_string(A v) {
     }
     res += "}";
     return res;
-}
-
-template <typename A>
-string to_string(complex<A> v) {
-    return to_string(v.real()) + "+" + to_string(v.imag()) + "i";
 }
  
 template <typename A, typename B>
