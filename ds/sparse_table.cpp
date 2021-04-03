@@ -1,10 +1,10 @@
-template<typename it, typename cmp>
+template<typename it, typename bin_op>
 struct sparse_table {
 
     using T = typename remove_reference<decltype(*declval<it>())>::type;
-    vector<vector<T>> t; cmp f;
+    vector<vector<T>> t; bin_op f;
 
-    sparse_table(it first, it last, cmp op) : t(1), f(op) {
+    sparse_table(it first, it last, bin_op op) : t(1), f(op) {
         int n = distance(first, last);
         t.assign(32-__builtin_clz(n), vector<T>(n));
         t[0].assign(first, last);
