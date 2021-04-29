@@ -1,6 +1,6 @@
 // N vertices, flow is measured with type T
 template<int N, typename T>
-struct flow {
+struct dinic {
 
     const bool SCALING = true;
     const T inf_T = numeric_limits<T>::max();

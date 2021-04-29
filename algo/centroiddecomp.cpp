@@ -34,6 +34,8 @@ struct centroid {
         if (v) c = i;
     }
 
+    // returns the centroid of the unvisited
+    // component of the tree containing r
     int find(int r) {
         dfs1(r, r);
         s = sz[r]/2;

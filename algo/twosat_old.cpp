@@ -1,3 +1,5 @@
+// THIS DOESN'T WORK
+
 struct twosat {
 
     int size;
@@ -60,13 +62,13 @@ struct twosat {
     }
 
     // declare that (x is a) implies (y is b)
-    inline void implies(int x, bool a, int y, bool b) {
+    void implies(int x, bool a, int y, bool b) {
         adj[x+(a ? size : 0)].push_back(y+(b ? size : 0));
         adj[y+(b ? 0 : size)].push_back(x+(a ? 0 : size));
     }
 
     // declare that x is true/false
-    inline void set(int x, bool a) {
+    void set(int x, bool a) {
         adj[x+(a ? 0 : size)].push_back(x+(a ? size : 0));
     }
 };

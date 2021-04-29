@@ -130,3 +130,13 @@ vector<int> mobiussieve(int n) {
         }
     return m;
 }
+
+// computes totient(i) for i from 0 to n in O(nlogn) time
+vector<int> totientsieve(int n) {
+    vector<int> p(n+1);
+    iota(p.begin(), p.end(), 0);
+    for (int i = 2; i <= n; i++)
+        if (p[i] == i) for (int j = i; j <= n; j += i)
+            p[j] = p[j]/i*(i-1);
+    return p;
+}
