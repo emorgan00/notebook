@@ -45,6 +45,7 @@ struct mincostflow {
 
     bool spfa() {
         fill(l, l+N, inf_T), l[s] = 0;
+        fill(vis, vis+N, 0);
         queue<int> q({s});
         while (!q.empty()) {
             int v = q.front(); q.pop();

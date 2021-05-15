@@ -54,7 +54,7 @@ vector<ll> primefactors(ll n) {
             n /= p, out.push_back(p);
     }
     if (n == 1 || isprime(n)) {
-        out.push_back(n);
+        if (n != 1) out.push_back(n);
         return out;
     }
     __int128_t x = 2, y = 2;
