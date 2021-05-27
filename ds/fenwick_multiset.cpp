@@ -51,4 +51,23 @@ struct fenwick_multiset {
                 x -= tree[i += m];
         return i;
     }
+
+    // returns the smallest element of the set
+    // which is > x, or N if no such element
+    int next_greater(int x) {
+        return get(index(x+1));
+    }
+
+    // returns the largest element of the set
+    // which is < x, or -1 if no such element
+    int next_lower(int x) {
+        T i = index(x);
+        return i == 0 ? -1 : get(i-1);
+    }
+
+    // returns the number of values in the set
+    // in the semi-open interval [l, r)
+    T count_interval(int l, int r) {
+        return index(r)-index(l);
+    }
 };

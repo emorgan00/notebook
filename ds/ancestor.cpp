@@ -33,8 +33,11 @@ struct ancestor {
 
     // returns the k'th ancestor of i O(logk) time.
     int ktha(int i, int k) const {
-        for (int j = 0; (1<<j) <= k; j++)
-            if (k&(1<<j)) i = p[i][j];
+        while (k) {
+            int j = k&-k;
+            i = p[i][__builtin_ctz(j)];
+            k -= j;
+        }
         return i;
     }
 
