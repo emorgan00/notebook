@@ -23,6 +23,7 @@ T inv(T a, T m) {
 // returns (n choose k) in O(k) time.
 template<typename T>
 T choose(T n, T k) {
+    if (k < 0 || k > n) return 0;
     T a = 1, b = 1, r = n;
     for (T d = 1; d <= min(k, n-k); d++, r--)
         a *= r, b *= d;
@@ -32,6 +33,7 @@ T choose(T n, T k) {
 // returns (n choose k) mod m in O(k+logm) time.
 template<typename T>
 T choosemod(T n, T k, T m) {
+    if (k < 0 || k > n) return 0;
     T a = 1, b = 1, r = n;
     for (T d = 1; d <= min(k, n-k); d++, r--)
         a = (a*r)%m, b = (b*d)%m;

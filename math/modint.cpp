@@ -43,6 +43,8 @@ struct modint {
     modint operator-() { return modint(0) -= *this; }
 
     // O(logk) modular exponentiation
-    modint pow(const ll k) const { return _pow(v, k); }
+    modint pow(const ll k) const {
+        return k < 0 ? _pow(v, M-1-(-k%(M-1))) : _pow(v, k);
+    }
     modint inv() const { return _pow(v, M-2); }
 };

@@ -1,5 +1,6 @@
 typedef long double ld;
 const ld PI = acos(-1);
+const ld EPS = 1e-12;
 
 template<typename T>
 struct point {
@@ -87,6 +88,21 @@ bool intersects(point<T> a, point<T> b, point<T> c, point<T> d) {
     else
         return (s_n < 0 && s_d < 0 || s_n > 0 && s_d > 0) && abs(s_n) < abs(s_d) 
             && (t_n < 0 && t_d < 0 || t_n > 0 && t_d > 0) && abs(t_n) < abs(t_d);
+}
+
+// helper for intersects below
+int _vec(const point<ld>& a, const point<ld>& b, const point<ld>& c) {
+    ld s = (b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+    return abs(s) < EPS ? 0 : s > 0 ? 1 : -1;
+}
+
+// returns true if segments AB and CD intersect
+// works for floats only, with EPS defined above
+bool intersects(point<ld> a, point<ld> b, point<ld> c, point<ld> d) {
+    return min(a.x, b.x) <= max(c.x, d.x)+EPS && min(c.x, d.x) <= max(a.x, b.x)+EPS
+        && min(a.y, b.y) <= max(c.y, d.y)+EPS && min(c.y, d.y) <= max(a.y, b.y)+EPS
+        && _vec(a, b, c)*_vec(a, b, d) <= 0
+        && _vec(c, d, a)*_vec(c, d, b) <= 0;
 }
 
 // returns the distance from A to *segment* BC
