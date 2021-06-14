@@ -37,6 +37,7 @@ struct scc {
     // some edge i->j in the original graph s.t. c[i] = u && c[j] = v, runs in O(E).
     vector<vector<int>> dag() {
         if (c.empty()) components();
+        if (c.empty()) return {};
         c_adj.resize(*max_element(c.begin(), c.end())+1);
         for (int i = 0; i < adj.size(); i++)
             for (int j : r_adj[i])
