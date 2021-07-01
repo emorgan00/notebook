@@ -35,7 +35,7 @@ struct segtree {
     void _upd(int l, int r, T x, bool ins, int i = 1) {
         if (l <= a[i] && r >= b[i]) apply(i, x, ins);
         push(i);
-        if (l > b[i] || r < a[i] || l <= a[i] && r >= b[i]) return;
+        if (l > b[i] || r < a[i] || (l <= a[i] && r >= b[i])) return;
         _upd(l, r, x, ins, 2*i), _upd(l, r, x, ins, 2*i+1);
         t[i] = merge(t[2*i], t[2*i+1]);
     }

@@ -6,6 +6,7 @@ vector<bool> primesieve(int n) {
         if (sieve[i])
             for (int j = 2*i; j < n; j += i)
                 sieve[j] = 0;
+    sieve[1] = 0;
     return sieve;
 }
 
@@ -75,11 +76,11 @@ vector<ll> primefactors(ll n) {
 ll primepower(ll n) {
     for (ll k = 1; k < 63; k++) {
         __int128_t p = 1;
-        for (ll i = 1ll<<32; i > 0; i /= 2) {
+        for (ll i = 1ll<<62; i > 0; i /= 2) {
             __int128_t x = 1;
             bool f = 0;
             for (int j = 0; j < k; j++)
-                if (f = f || (x *= (p+i)) > n) break;
+                if ((f = f || (x *= (p+i)) > n)) break;
             if (!f && x <= n) {
                 p += i;
                 if (x == n && isprime(p)) return p;
