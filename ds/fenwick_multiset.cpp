@@ -27,6 +27,8 @@ struct fenwick_multiset {
     // returns the number of elements in
     // the set which are strictly lower than x
     T index(int x) const {
+        if (x <= 0) return 0;
+        if (x >= N) return size();
         T i = 0;
         for (; x > 0; x -= x & -x)
             i += tree[x];
@@ -36,6 +38,7 @@ struct fenwick_multiset {
     // returns the number of elements in the set
     // which are exactly equal to x, O(1) amortized
     T count(int x) const {
+        if (x < 0 || x >= N) return 0;
         int y = x+1; T i = tree[x+1];
         for (y -= y & -y; x != y; x -= x & -x)
             i -= tree[x];
