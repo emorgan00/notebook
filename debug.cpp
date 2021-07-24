@@ -44,6 +44,21 @@ string to_string(vector<bool> v) {
     res += "}";
     return res;
 }
+
+template<long long unsigned int N>
+string to_string(bitset<N> v) {
+    bool first = true;
+    string res = "{";
+    for (int i = 0; i < static_cast<int>(v.size()); i++) {
+        if (!first) {
+            res += ", ";
+        }
+        first = false;
+        res += to_string((int)v[i]);
+    }
+    res += "}";
+    return res;
+}
  
 template <typename A>
 string to_string(A v) {
