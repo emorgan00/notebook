@@ -1,7 +1,7 @@
 template<typename it, typename bin_op>
 struct sparse_table {
 
-    using T = typename remove_reference<decltype(*declval<it>())>::type;
+    using T = typename iterator_traits<it>::value_type;
     vector<vector<T>> t; bin_op f;
 
     sparse_table(it first, it last, bin_op op) : f(op) {

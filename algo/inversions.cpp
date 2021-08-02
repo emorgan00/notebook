@@ -4,7 +4,7 @@
 template<typename it>
 long long inversions(it first, it last) {
 
-    typedef typename remove_reference<decltype(*first)>::type T;
+    using T = typename iterator_traits<it>::value_type;
     long long n = last-first, out = 0;
     vector<T> A(first, last), B(n);
 
