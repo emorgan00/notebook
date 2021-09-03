@@ -13,7 +13,7 @@ void sliding_window_fold(it1 first, it1 last, it2 result, int width, bin_op op) 
 }
 
 // given an array a of length n, returns an array b of length n+k-1
-// such that b[i] = op(a[i], a[i+1], ..., a[i+k-1]), not including invalid indices
+// such that b[i] = op(a[i-k+1], a[i-k+2], ..., a[i]), not including invalid indices
 template<typename it1, typename it2, typename bin_op>
 void sliding_window_fold2(it1 first, it1 last, it2 result, int width, bin_op op) {
     int n = distance(first, last);

@@ -14,7 +14,7 @@ struct sparse_table {
     }
 
     // returns f(a[l..r]) in O(1) time
-    T query(int l, int r) {
+    T operator()(int l, int r) {
         int h = floor(log2(r-l+1));
         return f(t[h][l], t[h][r-(1<<h)+1]);
     }

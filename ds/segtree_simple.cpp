@@ -52,7 +52,7 @@ struct segtree {
             /* add an update at tree[i] (may already have update) */
         }
         push(i);
-        if (l > b[i] || r < a[i] || l <= a[i] && r >= b[i])
+        if (l > b[i] || r < a[i] || (l <= a[i] && r >= b[i]))
             return;
         update(l, r, /* new update value */, 2*i);
         update(l, r, /* new update value */, 2*i+1);
