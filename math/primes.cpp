@@ -90,18 +90,25 @@ ll primepower(ll n) {
     return 0;
 }
 
-// returns a sorted list of all divisors of n in O(sqrt(n)) time.
-template<typename T>
-vector<T> divisors(T n) {
-    vector<T> s, e;
-    for (T i = 1; i <= (T)(sqrt(n)); i++)
-        if (n%i == 0) {
-            s.push_back(i);
-            if (i*i != n) e.push_back(n/i);
+// returns a sorted list of all divisors of n in approximately O(min(n^(1/2), n^(1/3)+log^3(n)+10^5)) time.
+// works for n <= 10^18
+vector<ll> divisors(ll n) {
+    map<ll, int> p;
+    for (ll x : primefactors(n))
+        p[x]++;
+    vector<ll> out = {1};
+    for (auto& [q, f] : p) {
+        vector<ll> tmp;
+        for (ll x : out) {
+            ll r = 1;
+            for (int i = 0; i <= f; i++) {
+                tmp.pb(x*r);
+                r *= q;
+            }
         }
-    for (int i = e.size()-1; i >= 0; i--)
-        s.push_back(e[i]);
-    return s;
+        out = tmp;
+    }
+    return out;
 }
 
 // computes Euler's totient function of n in O(sqrt(n)) time.
