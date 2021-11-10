@@ -35,6 +35,14 @@ struct fenwick_multiset {
         return i;
     }
 
+    T count_lower(int x) const {
+        return index(x);
+    }
+
+    T count_greater(int x) const {
+        return size()-index(x+1);
+    }
+
     // returns the number of elements in the set
     // which are exactly equal to x, O(1) amortized
     T count(int x) const {
@@ -55,17 +63,17 @@ struct fenwick_multiset {
         return i;
     }
 
-    // returns the smallest element of the set
-    // which is > x, or N if no such element
-    int next_greater(int x) {
-        return get(index(x+1));
-    }
-
     // returns the largest element of the set
     // which is < x, or -1 if no such element
     int next_lower(int x) {
         T i = index(x);
         return i == 0 ? -1 : get(i-1);
+    }
+
+    // returns the smallest element of the set
+    // which is > x, or N if no such element
+    int next_greater(int x) {
+        return get(index(x+1));
     }
 
     // returns the number of values in the set
