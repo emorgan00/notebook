@@ -16,6 +16,10 @@ struct ahocorasick {
 
     ahocorasick() : a({{0, 0, 0, -2, 0, {}}}) {}
 
+    size_t size() {
+        return a.size();
+    }
+
     // adds a string to the dictionary of the automaton,
     // and returns the state corresponding to that string
     template<typename it>

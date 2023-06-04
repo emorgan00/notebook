@@ -56,11 +56,14 @@ struct ancestor {
         return is_ancestor(i, j) ? ktha(j, d[j]-d[i]-1) : p[i][0];
     }
 
+    // returns the vertex k steps along the path from i to j in O(logn) time.
+    int step(int i, int j, int k) const {
+        int l = lca(i, j);
+        return d[i]-d[l] >= k ? ktha(i, k) : ktha(j, d[i]+d[j]-2*d[l]-k);
+    }
+
     // returns the number of edges between i and j in O(logn) time.
     int dist(int i, int j) {
         return d[i]+d[j]-2*d[lca(i, j)];
     }
 };
-
-// note, the file lca_old.cpp allows lca queries in O(1) time instead of O(logn) time,
-// but has a much higher constant factor and can cause MLE for around 5*10^5 vertices.
